@@ -1,0 +1,100 @@
+.reveal-container {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6rem;
+  text-align: center;
+}
+
+.pre-reveal p {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  color: var(--color-text-muted);
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.main-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+  width: 100%;
+}
+
+.birthday-greeting {
+  line-height: 1.2;
+}
+
+.recipient-name {
+  font-size: clamp(3.5rem, 8vw, 6rem);
+  display: inline-block;
+  margin-top: 0.5rem;
+}
+
+.heart {
+  display: inline-block;
+  font-size: clamp(2rem, 5vw, 4rem);
+  animation: pulse-glow 2s infinite;
+  color: #ef4444; /* Explicitly red for heart, overriding gradient if needed */
+  -webkit-text-fill-color: initial;
+}
+
+.birthday-photo-moment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.photo-wrapper {
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 4/5;
+  padding: 1rem;
+  transform: rotate(-2deg);
+  transition: transform 0.5s ease;
+}
+
+.photo-wrapper:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+.birthday-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.birthday-message {
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  line-height: 1.8;
+  color: var(--color-text-main);
+  max-width: 600px;
+}
+
+@media (max-width: 768px) {
+  .reveal-container {
+    gap: 4rem;
+  }
+  
+  .main-reveal {
+    gap: 3rem;
+  }
+}
