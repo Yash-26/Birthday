@@ -17,7 +17,7 @@ const BirthdayReveal = ({ content, name }) => {
         <div className="birthday-photo-moment">
           <div className="photo-wrapper glass-panel">
             <div className="image-placeholder">
-               <img src={content.image} alt="Birthday moment" className="birthday-image" onError={(e) => e.target.style.display='none'} />
+               <img src={content.image} alt="Birthday moment" className="birthday-image" loading="lazy" decoding="async" onError={(e) => e.target.style.display='none'} />
                <span className="placeholder-text">Her Best Photo</span>
             </div>
           </div>

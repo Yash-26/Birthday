@@ -13,7 +13,7 @@ const FuturePlans = ({ plans }) => {
           <div key={plan.id} className={`future-card glass-panel card-${index % 2 === 0 ? 'even' : 'odd'}`}>
             <div className="future-image-wrapper">
                <div className="image-placeholder">
-                  <img src={plan.image} alt={plan.title} className="future-image" onError={(e) => e.target.style.display='none'} />
+                  <img src={plan.image} alt={plan.title} className="future-image" loading="lazy" decoding="async" onError={(e) => e.target.style.display='none'} />
                   <span className="placeholder-text">Future Image</span>
                </div>
             </div>

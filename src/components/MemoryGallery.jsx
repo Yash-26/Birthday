@@ -33,7 +33,7 @@ const MemoryGallery = ({ memories }) => {
           <div key={memory.id} className="gallery-item glass-panel">
             <div className="gallery-image-wrapper">
               <div className="image-placeholder">
-                <img src={memory.image} alt={memory.title} className="gallery-image" loading="lazy" onError={(e) => e.target.style.display='none'} />
+                <img src={memory.image} alt={memory.title} className="gallery-image" loading="lazy" decoding="async" onError={(e) => e.target.style.display='none'} />
                 <span className="placeholder-text">Photo</span>
               </div>
             </div>

@@ -3,6 +3,8 @@ import { Volume2, VolumeX } from 'lucide-react';
 import { birthdayContent } from './data/birthdayContent';
 import { useScrollReveal } from './hooks/useScrollReveal';
 
+import StarField from './components/StarField';
+import './components/StarField.css';
 import EntryScreen from './components/EntryScreen';
 import Introduction from './components/Introduction';
 import StoryConstellation from './components/StoryConstellation';
@@ -52,7 +54,7 @@ function App() {
   return (
     <div className="app-container">
       {/* Background elements */}
-      <div className="stars-background"></div>
+      <StarField />
       <div className="ambient-glow"></div>
 
       {/* Audio Element */}

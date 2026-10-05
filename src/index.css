@@ -31,7 +31,6 @@ html {
 body {
   background-color: var(--color-bg-deep);
   background-image: radial-gradient(circle at 50% 0%, var(--color-bg-night) 0%, var(--color-bg-deep) 70%);
-  background-attachment: fixed;
   color: var(--color-text-main);
   font-family: var(--font-body);
   font-weight: 300;
@@ -64,9 +63,9 @@ p {
 }
 
 @keyframes pulse-glow {
-  0% { box-shadow: 0 0 10px rgba(167, 139, 250, 0.2); }
-  50% { box-shadow: 0 0 20px rgba(167, 139, 250, 0.5); }
-  100% { box-shadow: 0 0 10px rgba(167, 139, 250, 0.2); }
+  0% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.02); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.85; }
 }
 
 @keyframes fadeIn {
@@ -76,10 +75,8 @@ p {
 
 /* Utility Classes */
 .glass-panel {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  background: rgba(12, 14, 35, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: var(--glass-shadow);
   border-radius: 16px;
 }

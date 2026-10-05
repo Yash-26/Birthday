@@ -52,6 +52,7 @@ const VideoSection = ({ content }) => {
           ref={videoRef}
           className="custom-video"
           poster={content.poster}
+          preload="metadata"
           onTimeUpdate={handleTimeUpdate}
           onEnded={() => setIsPlaying(false)}
           playsInline

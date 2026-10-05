@@ -69,7 +69,7 @@ const StoryConstellation = ({ memories }) => {
             <div className="modal-image-container">
               {/* Fallback box if image fails or placeholder */}
               <div className="image-placeholder">
-                 <img src={activeMemory.image} alt={activeMemory.title} className="modal-image" onError={(e) => e.target.style.display='none'} />
+                 <img src={activeMemory.image} alt={activeMemory.title} className="modal-image" loading="lazy" decoding="async" onError={(e) => e.target.style.display='none'} />
                  <span className="placeholder-text">Photo Placeholder</span>
               </div>
             </div>

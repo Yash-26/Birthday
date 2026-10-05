@@ -15,7 +15,8 @@
 .video-player-wrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/9;
+  max-width: 400px;
+  aspect-ratio: 9/16;
   border-radius: 16px;
   overflow: hidden;
   background: #000;

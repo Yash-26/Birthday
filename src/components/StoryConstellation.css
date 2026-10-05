@@ -92,8 +92,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(2, 1, 10, 0.8);
-  backdrop-filter: blur(8px);
+  background: rgba(2, 1, 10, 0.95);
   z-index: 1000;
   display: flex;
   align-items: center;
