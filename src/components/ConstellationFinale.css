@@ -55,15 +55,14 @@
 }
 
 .finale-star {
-  fill: #fff;
   opacity: 0;
-  transform-origin: center;
-  transition-property: cx, cy;
+  fill: #fff;
+  transition: left 4s cubic-bezier(0.4, 0, 0.2, 1), top 4s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s ease;
+  will-change: left, top, opacity;
 }
 
 .finale-star.appear {
   opacity: 0.7;
-  transition: opacity 1s ease;
 }
 
 .finale-star.glow {
@@ -71,13 +70,12 @@
   filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
 }
 
-.hidden-star {
-  fill: #fff;
+.finale-star.special {
   opacity: 0;
-  transform-origin: center;
+  transition: opacity 2s ease;
 }
 
-.hidden-star.appear-special {
+.finale-star.appear-special {
   opacity: 1;
   animation: special-star-glow 3s infinite alternate;
   transition: opacity 2s ease;
@@ -88,18 +86,30 @@
   100% { filter: drop-shadow(0 0 10px rgba(167, 139, 250, 1)); fill: #FBCFE8; }
 }
 
+/* Custom sizes for finale stars */
+.finale-star.s-node {
+  width: 8px;
+  height: 8px;
+}
+
+.finale-star.special-node {
+  width: 14px;
+  height: 14px;
+  fill: #FBCFE8;
+}
+
 .finale-path {
   stroke: rgba(255, 255, 255, 0.4);
   stroke-width: 0.5;
-  stroke-dasharray: 400;
-  stroke-dashoffset: 400;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
   opacity: 0;
 }
 
 .finale-path.draw-in {
   opacity: 1;
   stroke-dashoffset: 0;
-  transition: stroke-dashoffset 3s ease-in-out, opacity 1s ease;
+  transition: stroke-dashoffset 4.5s ease-in-out, opacity 2s ease;
 }
 
 .finale-reveal-text {
@@ -128,7 +138,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .finale-star {
-    transition: none !important;
+    transition: opacity 1s ease !important;
   }
   .finale-path.draw-in {
     transition: opacity 1s ease !important;

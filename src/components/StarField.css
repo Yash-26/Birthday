@@ -8,43 +8,55 @@
   pointer-events: none;
 }
 
-.star {
+.svg-star {
   position: absolute;
-  background-color: #ffffff;
-  border-radius: 50%;
+  transform-origin: center;
 }
 
-.star.small {
-  width: 1px;
-  height: 1px;
-}
-
-.star.medium {
+/* Sizing */
+.svg-star.tiny {
   width: 2px;
   height: 2px;
-  box-shadow: 0 0 2px rgba(255, 255, 255, 0.4);
 }
 
-.star.large {
-  width: 3px;
-  height: 3px;
-  box-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
-  clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%);
-  background-color: #e2e8f0;
+.svg-star.small {
+  width: 4px;
+  height: 4px;
 }
 
-.star.twinkle {
+.svg-star.medium {
+  width: 6px;
+  height: 6px;
+}
+
+.svg-star.large {
+  width: 8px;
+  height: 8px;
+}
+
+/* Glow effects for specific types */
+.svg-star.bright {
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+}
+
+.svg-star.special {
+  filter: drop-shadow(0 0 6px rgba(167, 139, 250, 0.9));
+  fill: #FBCFE8; /* Sakura accent */
+}
+
+/* Twinkle Animation */
+.svg-star.twinkle {
   animation: star-twinkle 4s ease-in-out infinite alternate;
 }
 
 @keyframes star-twinkle {
-  0% { opacity: 0.2; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.2); }
-  100% { opacity: 0.2; transform: scale(0.8); }
+  0% { opacity: 0.3; transform: scale(0.7) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.1) rotate(5deg); }
+  100% { opacity: 0.3; transform: scale(0.7) rotate(0deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .star.twinkle {
+  .svg-star.twinkle {
     animation: none;
   }
 }

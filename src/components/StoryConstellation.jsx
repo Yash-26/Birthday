@@ -7,11 +7,11 @@ const StoryConstellation = ({ memories }) => {
 
   // Positions for the constellation nodes to make it look organic
   const positions = [
-    { top: '10%', left: '20%' },
-    { top: '30%', left: '60%' },
-    { top: '50%', left: '30%' },
-    { top: '70%', left: '70%' },
-    { top: '90%', left: '40%' }
+    { top: '85%', left: '50%' }, // Bottom
+    { top: '50%', left: '22%' }, // Mid Left
+    { top: '25%', left: '35%' }, // Top Left
+    { top: '25%', left: '65%' }, // Top Right
+    { top: '50%', left: '78%' }  // Mid Right
   ];
 
   const handleNodeClick = (memory) => {
@@ -31,11 +31,14 @@ const StoryConstellation = ({ memories }) => {
 
       <div className="constellation-map reveal reveal-delay-2">
         {/* Draw lines between nodes using SVG */}
-        <svg className="constellation-lines" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-           <line x1="20%" y1="10%" x2="60%" y2="30%" stroke="rgba(255,255,255,0.15)" strokeWidth="1" strokeDasharray="5,5" />
-           <line x1="60%" y1="30%" x2="30%" y2="50%" stroke="rgba(255,255,255,0.15)" strokeWidth="1" strokeDasharray="5,5" />
-           <line x1="30%" y1="50%" x2="70%" y2="70%" stroke="rgba(255,255,255,0.15)" strokeWidth="1" strokeDasharray="5,5" />
-           <line x1="70%" y1="70%" x2="40%" y2="90%" stroke="rgba(255,255,255,0.15)" strokeWidth="1" strokeDasharray="5,5" />
+        <svg className="constellation-lines" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+           <path 
+             d="M 50 85 C 50 85, 15 55, 15 35 C 15 15, 45 15, 50 35 C 55 15, 85 15, 85 35 C 85 55, 50 85, 50 85" 
+             stroke="rgba(255,255,255,0.15)" 
+             strokeWidth="0.5" 
+             strokeDasharray="2,2" 
+             fill="none" 
+           />
         </svg>
 
         {memories.slice(0, 5).map((memory, index) => (
