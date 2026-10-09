@@ -4,57 +4,61 @@ export const birthdayContent = {
 
   opening: {
     title: "For you.",
-    subtitle: "I made a little place for you."
+    subtitle: "A little something made only for you"
   },
 
   introduction: [
-    "I know today is just another working day.",
-    "You'll have things to do.",
-    "Places to be.",
-    "People to talk to.",
-    "And unfortunately, I can't be there beside you today.",
-    "So instead...",
-    "I made this little corner of the internet.",
-    "Just for you.",
-    "[PLACEHOLDER: INTRODUCTION MESSAGE]"
+    "I wish I could be there today.",
+    "Not just to wish you a happy birthday,",
+    "but to actually see your face when I say it.",
+    "To spend the day with you.",
+    "To make you smile.",
+    "To be there for all the little moments.",
+    "But this time, being there isn't possible.",
+    "So I found another way to be a little closer to you.",
+
   ],
 
-  memories: [
+  ourStory: [
     {
       id: "memory-1",
-      title: "Where It All Started",
-      date: "[DATE]",
-      description: "[PERSONAL MEMORY - e.g., The first time we met and talked for hours.]",
+      title: "Little Did I Know",
+      description: "I didn't know it then, but this was the beginning of a story that would become one of the most beautiful parts of my life — a story I'm so glad began with you.",
       image: "/assets/images/memory-01.jpg"
     },
     {
       id: "memory-2",
-      title: "Our First Trip",
-      date: "[DATE]",
-      description: "[PERSONAL MEMORY - e.g., Getting lost in the city but finding that amazing cafe.]",
+      title: "A Little Gift from the Sea",
+      description: "Your favourite kind of place, your hand in mine, and little green treasures the sea seemed to leave just for us.",
       image: "/assets/images/memory-02.jpg"
     },
     {
       id: "memory-3",
-      title: "That Random Tuesday",
-      date: "[DATE]",
-      description: "[PERSONAL MEMORY - e.g., When we stayed in and just laughed until our stomachs hurt.]",
+      title: "Somewhere Along the Way",
+      description: "No matter how ordinary the moment might have seemed, it gave me another little piece of time with you to keep.",
       image: "/assets/images/memory-03.jpg"
     },
     {
       id: "memory-4",
-      title: "The Big Milestone",
-      date: "[DATE]",
-      description: "[PERSONAL MEMORY - e.g., Celebrating your achievement together.]",
+      title: "Our First New Beginning",
+      description: "A new year, a temple visit, and you beside me. I couldn't have asked for a more meaningful way to begin a year with you.",
       image: "/assets/images/memory-04.jpg"
     },
     {
       id: "memory-5",
-      title: "A Quiet Moment",
-      date: "[DATE]",
-      description: "[PERSONAL MEMORY - e.g., Watching the sunset from that special spot.]",
+      title: "A Ride Along the Shore, With You",
+      description: "With the ocean around us, the gentle rhythm of a horse's steps, and your smile beside me, the day became one of those memories I wish I could step back into.",
       image: "/assets/images/memory-05.jpg"
     }
+  ],
+
+  moments: [
+    {
+      id: "memory-1",
+      title: "Little Did I Know",
+      description: "I didn't know it then, but this was the beginning of a story that would become one of the most beautiful parts of my life — a story I'm so glad began with you.",
+      image: "/assets/images/miha3.jpg"
+    },
   ],
 
   messages: [

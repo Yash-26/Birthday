@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import './StoryConstellation.css';
 
-const StoryConstellation = ({ memories }) => {
+const StoryConstellation = ({ ourStory }) => {
   const [activeMemory, setActiveMemory] = useState(null);
 
   // Positions for the constellation nodes to make it look organic
@@ -41,7 +41,7 @@ const StoryConstellation = ({ memories }) => {
            />
         </svg>
 
-        {memories.slice(0, 5).map((memory, index) => (
+        {ourStory.slice(0, 5).map((memory, index) => (
           <div 
             key={memory.id}
             className="constellation-node-wrapper"
@@ -57,7 +57,7 @@ const StoryConstellation = ({ memories }) => {
             >
               <div className="node-glow"></div>
             </button>
-            <span className="node-label">{memory.date}</span>
+            <span className="node-label">{memory.title}</span>
           </div>
         ))}
       </div>
@@ -70,14 +70,11 @@ const StoryConstellation = ({ memories }) => {
               <X size={24} />
             </button>
             <div className="modal-image-container">
-              {/* Fallback box if image fails or placeholder */}
-              <div className="image-placeholder">
-                 <img src={activeMemory.image} alt={activeMemory.title} className="modal-image" loading="lazy" decoding="async" onError={(e) => e.target.style.display='none'} />
-                 <span className="placeholder-text">Photo Placeholder</span>
-              </div>
+               <img src={activeMemory.image} alt="" className="modal-image-blur" aria-hidden="true" />
+               <img src={activeMemory.image} alt={activeMemory.title} className="modal-image" loading="lazy" decoding="async" onError={(e) => e.target.style.display='none'} />
             </div>
             <div className="modal-content">
-              <span className="modal-date">{activeMemory.date}</span>
+
               <h3 className="modal-title">{activeMemory.title}</h3>
               <p className="modal-description">{activeMemory.description}</p>
             </div>

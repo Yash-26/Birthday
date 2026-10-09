@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import './MemoryGallery.css';
 
-const MemoryGallery = ({ memories }) => {
+const MemoryGallery = ({ moments }) => {
   const scrollRef = useRef(null);
 
   const scroll = (direction) => {
@@ -29,16 +29,14 @@ const MemoryGallery = ({ memories }) => {
       </div>
 
       <div className="gallery-track reveal reveal-delay-2" ref={scrollRef}>
-        {memories.map((memory) => (
+        {moments.map((memory) => (
           <div key={memory.id} className="gallery-item glass-panel">
             <div className="gallery-image-wrapper">
-              <div className="image-placeholder">
-                <img src={memory.image} alt={memory.title} className="gallery-image" loading="lazy" decoding="async" onError={(e) => e.target.style.display='none'} />
-                <span className="placeholder-text">Photo</span>
-              </div>
+              <img src={memory.image} alt="" className="gallery-image-blur" aria-hidden="true" />
+              <img src={memory.image} alt={memory.title} className="gallery-image" loading="lazy" decoding="async" onError={(e) => e.target.style.display='none'} />
             </div>
             <div className="gallery-caption">
-              <span className="gallery-date">{memory.date}</span>
+
               <h4 className="gallery-title">{memory.title}</h4>
             </div>
           </div>

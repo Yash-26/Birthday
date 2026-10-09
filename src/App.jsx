@@ -82,11 +82,11 @@ function App() {
         </section>
 
         <section id="story">
-          <StoryConstellation memories={birthdayContent.memories} />
+          <StoryConstellation ourStory={birthdayContent.ourStory} />
         </section>
 
         <section id="gallery">
-          <MemoryGallery memories={birthdayContent.memories} />
+          <MemoryGallery moments={birthdayContent.moments} />
         </section>
 
         <section id="messages">
