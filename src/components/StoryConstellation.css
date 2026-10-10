@@ -200,4 +200,48 @@
   .modal-content {
     padding: 1.5rem;
   }
+
+  .node-label {
+    white-space: normal;
+    text-align: center;
+    position: absolute;
+    width: 110px;
+    line-height: 1.3;
+    font-size: 0.75rem;
+  }
+
+  /* Node 0: Bottom (Little Did I Know) */
+  .node-0 .node-label {
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* Node 1: Mid Left (A Little Gift from the Sea) */
+  .node-1 .node-label {
+    top: 24px;
+    left: 50%;
+    transform: translateX(-40%);
+  }
+
+  /* Node 2: Top Left (Somewhere Along the Way) */
+  .node-2 .node-label {
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-65%);
+  }
+
+  /* Node 3: Top Right (Our First New Beginning) */
+  .node-3 .node-label {
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-35%);
+  }
+
+  /* Node 4: Mid Right (A Ride Along the Shore, With You) */
+  .node-4 .node-label {
+    top: 24px;
+    left: 50%;
+    transform: translateX(-60%);
+  }
 }

@@ -44,7 +44,7 @@ const StoryConstellation = ({ ourStory }) => {
         {ourStory.slice(0, 5).map((memory, index) => (
           <div 
             key={memory.id}
-            className="constellation-node-wrapper"
+            className={`constellation-node-wrapper node-${index}`}
             style={{ 
               top: positions[index]?.top || '50%', 
               left: positions[index]?.left || '50%' 
