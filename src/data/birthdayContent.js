@@ -54,10 +54,29 @@ export const birthdayContent = {
 
   moments: [
     {
-      id: "memory-1",
-      title: "Little Did I Know",
-      description: "I didn't know it then, but this was the beginning of a story that would become one of the most beautiful parts of my life — a story I'm so glad began with you.",
-      image: "/assets/images/miha3.jpg"
+      id: "moment-1",
+      title: "Your Smile on Our First Boat Ride",
+      image: "/assets/images/moment1.jpg"
+    },
+    {
+      id: "moment-2",
+      title: "A Little Kiss by the Sea",
+      image: "/assets/images/moment2.jpg"
+    },
+    {
+      id: "moment-3",
+      title: "A Day I'll Always Treasure",
+      image: "/assets/images/moment3.jpg"
+    },
+    {
+      id: "moment-4",
+      title: "The Smile I’ll Always Protect",
+      image: "/assets/images/moment4.jpg"
+    },
+    {
+      id: "moment-5",
+      title: "You Beneath the Moonlight",
+      image: "/assets/images/moment5.jpg"
     },
   ],
 

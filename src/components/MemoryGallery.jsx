@@ -33,7 +33,7 @@ const MemoryGallery = ({ moments }) => {
           <div key={memory.id} className="gallery-item glass-panel">
             <div className="gallery-image-wrapper">
               <img src={memory.image} alt="" className="gallery-image-blur" aria-hidden="true" />
-              <img src={memory.image} alt={memory.title} className="gallery-image" loading="lazy" decoding="async" onError={(e) => e.target.style.display='none'} />
+              <img src={memory.image} alt={memory.title} className="gallery-image" loading="lazy" decoding="async" onError={(e) => e.target.style.display = 'none'} />
             </div>
             <div className="gallery-caption">
 
@@ -41,16 +41,7 @@ const MemoryGallery = ({ moments }) => {
             </div>
           </div>
         ))}
-        {/* Add more empty placeholders to show scrolling capability */}
-        {[1, 2, 3].map((_, i) => (
-           <div key={`empty-${i}`} className="gallery-item glass-panel empty-item">
-             <div className="gallery-image-wrapper">
-               <div className="image-placeholder">
-                 <span className="placeholder-text">Add Photo</span>
-               </div>
-             </div>
-           </div>
-        ))}
+
       </div>
     </div>
   );
