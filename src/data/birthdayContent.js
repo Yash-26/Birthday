@@ -1,5 +1,5 @@
 export const birthdayContent = {
-  recipientName: "[HER NAME]",
+  recipientName: "Suvigshaa",
   nickname: "[NICKNAME]",
 
   opening: {
@@ -80,37 +80,10 @@ export const birthdayContent = {
     },
   ],
 
-  messages: [
-    {
-      id: "msg-1",
-      title: "Open when you need a smile",
-      message: "[PERSONAL MESSAGE - e.g., I'm probably thinking about that silly thing you did the other day.]"
-    },
-    {
-      id: "msg-2",
-      title: "Open when you miss me",
-      message: "[PERSONAL MESSAGE - e.g., Close your eyes, take a deep breath. I'm always with you.]"
-    },
-    {
-      id: "msg-3",
-      title: "Open when you're having a bad day",
-      message: "[PERSONAL MESSAGE - e.g., Whatever it is, we will figure it out together. You are stronger than you think.]"
-    },
-    {
-      id: "msg-4",
-      title: "Open when you need a reminder",
-      message: "[PERSONAL MESSAGE - e.g., You are incredibly loved, exactly as you are.]"
-    },
-    {
-      id: "msg-5",
-      title: "Open when you want to know what I love about you",
-      message: "[PERSONAL MESSAGE - e.g., Your laugh, the way your eyes light up, and your endless kindness.]"
-    }
-  ],
 
   birthday: {
-    message: "[PERSONAL BIRTHDAY MESSAGE - e.g., You mean the absolute world to me. I hope this year brings you as much joy as you bring to everyone around you.]",
-    image: "/assets/images/birthday.jpg"
+    message: "I hope this little universe reminds you how deeply loved you are.",
+    image: "/assets/images/miha3.jpg"
   },
 
   video: {
@@ -121,27 +94,24 @@ export const birthdayContent = {
   future: [
     {
       id: "future-1",
-      title: "[PLACE]",
-      description: "[e.g., Let's finally go to Japan and see the cherry blossoms.]",
-      image: "/assets/images/future-01.jpg"
+      title: "Our Sunset by the Sea",
+      description: "Someday, I want to watch the sky turn gold over the sea with you beside me, with nowhere else we need to be.",
+      image: "/assets/images/future-01.png",
+      objectPosition: "center 15%"
     },
     {
       id: "future-2",
-      title: "[EXPERIENCE]",
-      description: "[e.g., Take that pottery class we kept talking about.]",
-      image: "/assets/images/future-02.jpg"
+      title: "Cuddled Close Under the Stars",
+      description: "Someday, I want to cuddle close with you beneath the stars you love, watching your eyes light up at the beautiful night sky while I quietly enjoy having you in my arms.",
+      image: "/assets/images/future-02.png",
+      objectPosition: "center 20%"
     },
     {
       id: "future-3",
-      title: "[GOAL]",
-      description: "[e.g., Move into a place with a huge balcony.]",
-      image: "/assets/images/future-03.jpg"
-    },
-    {
-      id: "future-4",
-      title: "[ADVENTURE]",
-      description: "[e.g., A spontaneous road trip with no destination.]",
-      image: "/assets/images/future-04.jpg"
+      title: "The World Is More Beautiful With You",
+      description: "I want to take you to beautiful places, watch your eyes light up as you take in every view, and find little moments to hold you close. And while you're busy enjoying the beauty around you, I'll probably be looking at you, wondering how I got so lucky to share it all with you.",
+      image: "/assets/images/future-03.png",
+      objectPosition: "center 20%"
     }
   ],
 

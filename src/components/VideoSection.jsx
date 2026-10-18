@@ -43,12 +43,11 @@ const VideoSection = ({ content }) => {
   return (
     <div className="video-section-container">
       <div className="section-header reveal">
-        <h2 className="text-gradient">I wish I could have said this to you in person.</h2>
-        <p>So I recorded it instead.</p>
+        <h2 className="text-gradient">Can I Have a Little Moment With You?</h2>
       </div>
 
       <div className="video-player-wrapper glass-panel reveal reveal-delay-2">
-        <video 
+        <video
           ref={videoRef}
           className="custom-video"
           poster={content.poster}
@@ -73,7 +72,7 @@ const VideoSection = ({ content }) => {
           <button className="control-btn" onClick={togglePlay} aria-label={isPlaying ? "Pause" : "Play"}>
             {isPlaying ? <Pause size={20} /> : <Play size={20} />}
           </button>
-          
+
           <div className="progress-bar-container" onClick={handleSeek}>
             <div className="progress-bar-bg"></div>
             <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
@@ -82,7 +81,7 @@ const VideoSection = ({ content }) => {
           <button className="control-btn" onClick={toggleMute} aria-label={isMuted ? "Unmute" : "Mute"}>
             {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
           </button>
-          
+
           <button className="control-btn" onClick={toggleFullscreen} aria-label="Fullscreen">
             <Maximize size={20} />
           </button>

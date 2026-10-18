@@ -65,21 +65,42 @@
   transform: rotate(0deg) scale(1.02);
 }
 
+.birthday-image-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
 .birthday-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   border-radius: 8px;
+  transition: transform 0.6s ease;
 }
 
-.image-placeholder {
+.photo-wrapper:hover .birthday-image {
+  transform: scale(1.03);
+}
+
+.placeholder-fallback {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
+}
+
+.placeholder-text {
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
 }
 
 .birthday-message {

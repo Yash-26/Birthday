@@ -14,8 +14,6 @@ const EntryScreen = ({ content, onStart, hasStarted }) => {
         </button>
       </div>
       
-      {/* Decorative elements */}
-      <div className="moon-glow"></div>
     </div>
   );
 };

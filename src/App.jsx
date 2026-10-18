@@ -9,7 +9,6 @@ import EntryScreen from './components/EntryScreen';
 import Introduction from './components/Introduction';
 import StoryConstellation from './components/StoryConstellation';
 import MemoryGallery from './components/MemoryGallery';
-import MessageCards from './components/MessageCards';
 import BirthdayReveal from './components/BirthdayReveal';
 import VideoSection from './components/VideoSection';
 import FuturePlans from './components/FuturePlans';
@@ -87,10 +86,6 @@ function App() {
 
         <section id="gallery">
           <MemoryGallery moments={birthdayContent.moments} />
-        </section>
-
-        <section id="messages">
-          <MessageCards messages={birthdayContent.messages} />
         </section>
 
         <section id="birthday-reveal">
