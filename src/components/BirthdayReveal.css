@@ -26,7 +26,11 @@
 }
 
 .birthday-greeting {
-  line-height: 1.2;
+  line-height: 1.25;
+}
+
+.birthday-greeting-line {
+  display: inline-block;
 }
 
 .recipient-name {
@@ -39,8 +43,9 @@
   display: inline-block;
   font-size: clamp(2rem, 5vw, 4rem);
   animation: pulse-glow 2s infinite;
-  color: #ef4444; /* Explicitly red for heart, overriding gradient if needed */
-  -webkit-text-fill-color: initial;
+  margin-left: 0.75rem;
+  margin-top: -25px;
+  vertical-align: middle;
 }
 
 .birthday-photo-moment {
@@ -112,10 +117,48 @@
 
 @media (max-width: 768px) {
   .reveal-container {
-    gap: 4rem;
+    gap: 2.25rem;
   }
-  
+
+  .pre-reveal p {
+    font-size: clamp(1.15rem, 4.2vw, 1.45rem);
+    line-height: 1.55;
+    padding: 0 0.5rem;
+  }
+
   .main-reveal {
-    gap: 3rem;
+    gap: 2rem;
+  }
+
+  .birthday-greeting {
+    font-size: clamp(1.85rem, 6.5vw, 2.5rem);
+    line-height: 1.25;
+  }
+
+  .recipient-name {
+    font-size: clamp(2.5rem, 9.5vw, 3.8rem);
+    margin-top: 0.25rem;
+  }
+
+  .heart {
+    font-size: clamp(1.8rem, 6vw, 2.4rem);
+    margin-left: 0.2rem;
+    margin-top: -13px;
+  }
+
+  .birthday-photo-moment {
+    gap: 1.75rem;
+  }
+
+  .photo-wrapper {
+    max-width: 320px;
+    padding: 0.75rem;
+    transform: rotate(-1deg);
+  }
+
+  .birthday-message {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    padding: 0 0.5rem;
   }
 }

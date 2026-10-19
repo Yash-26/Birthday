@@ -159,15 +159,20 @@
 @media (max-width: 768px) {
   .gallery-header {
     padding-left: 1rem;
-    margin-bottom: 3rem;
+    margin-bottom: 0.5rem;
   }
   
   .gallery-controls {
-    top: auto;
-    bottom: 0;
-    right: 50%;
-    transform: translateX(50%);
-    z-index: 10;
+    top: 0.25rem;
+    right: 1rem;
+    bottom: auto;
+    transform: none;
+    gap: 0.5rem;
+  }
+
+  .gallery-btn {
+    width: 40px;
+    height: 40px;
   }
   
   .gallery-item {
@@ -178,6 +183,6 @@
   }
   
   .gallery-track {
-    padding: 1rem 1rem 4rem 1rem;
+    padding: 0.5rem 1rem 1.5rem 1rem;
   }
 }

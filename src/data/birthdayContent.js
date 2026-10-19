@@ -1,5 +1,5 @@
 export const birthdayContent = {
-  recipientName: "Suvigshaa",
+  recipientName: "Suvi",
   nickname: "[NICKNAME]",
 
   opening: {
@@ -106,13 +106,7 @@ export const birthdayContent = {
       image: "/assets/images/future-02.png",
       objectPosition: "center 20%"
     },
-    {
-      id: "future-3",
-      title: "The World Is More Beautiful With You",
-      description: "I want to take you to beautiful places, watch your eyes light up as you take in every view, and find little moments to hold you close. And while you're busy enjoying the beauty around you, I'll probably be looking at you, wondering how I got so lucky to share it all with you.",
-      image: "/assets/images/future-03.png",
-      objectPosition: "center 20%"
-    }
+
   ],
 
   final: {

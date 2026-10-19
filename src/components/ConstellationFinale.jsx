@@ -2,14 +2,14 @@ import React, { useEffect, useState, useRef, useMemo } from 'react';
 import './ConstellationFinale.css';
 
 const ConstellationFinale = ({ config }) => {
-  const [phase, setPhase] = useState(0); 
+  const [phase, setPhase] = useState(0);
   // 0: hidden
   // 1: scattered stars visible
   // 2: moving to positions
   // 3: lines form, S revealed
   // 4: hidden star appears
   // 5: final text
-  
+
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -74,10 +74,10 @@ const ConstellationFinale = ({ config }) => {
   const renderStar = (star) => {
     const currentX = phase >= 2 ? star.finalX : star.startX;
     const currentY = phase >= 2 ? star.finalY : star.startY;
-    
+
     // We reuse the styling classes from StarField (svg-star, bright, medium, special, large)
     let className = `finale-star svg-star ${star.isSpecial ? 'special-node' : 's-node'}`;
-    
+
     if (star.isSpecial) {
       if (phase >= 4) className += ' appear-special';
     } else {
@@ -86,9 +86,9 @@ const ConstellationFinale = ({ config }) => {
     }
 
     return (
-      <svg 
-        key={star.id} 
-        className={className} 
+      <svg
+        key={star.id}
+        className={className}
         viewBox="0 0 100 100"
         style={{
           left: `${currentX}%`,
@@ -104,7 +104,7 @@ const ConstellationFinale = ({ config }) => {
 
   return (
     <div className="finale-container" ref={containerRef}>
-      
+
       {phase >= 1 && (
         <div className={`finale-intro-text ${phase >= 2 ? 'fade-out' : ''}`}>
           <p>Some things are easier to say when you look at the stars...</p>
@@ -112,11 +112,11 @@ const ConstellationFinale = ({ config }) => {
       )}
 
       <div className={`finale-constellation-wrapper ${phase >= 1 ? 'visible' : ''}`}>
-        
+
         {/* Draw the connecting lines using SVG */}
         <svg viewBox="0 0 100 100" className="finale-svg" preserveAspectRatio="xMidYMid meet" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
-          <path 
-            d={pathD} 
+          <path
+            d={pathD}
             className={`finale-path ${phase >= 3 ? 'draw-in' : ''}`}
             fill="none"
             pathLength="100"
@@ -130,8 +130,8 @@ const ConstellationFinale = ({ config }) => {
 
       {phase >= 5 && (
         <div className="finale-reveal-text">
-          <h2 className="text-accent">I made this little universe for you.</h2>
-          <p className="hidden-star-text reveal-delay-2">One star always stays beside you.</p>
+          <h2 className="text-accent">I made this little universe for you</h2>
+          <p className="hidden-star-text reveal-delay-2">And one star will always stay beside you</p>
         </div>
       )}
     </div>

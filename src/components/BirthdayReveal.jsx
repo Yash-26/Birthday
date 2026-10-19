@@ -7,13 +7,15 @@ const BirthdayReveal = ({ content, name }) => {
   return (
     <div className="reveal-container">
       <div className="pre-reveal reveal">
-        <p>Every little piece of this universe led to you.</p>
+        <p>Somehow, in this vast universe, life brought me to you. And today, I get to celebrate you</p>
       </div>
 
       <div className="main-reveal reveal reveal-delay-2">
-        <h1 className="birthday-greeting text-accent">
-          Happy Birthday, <br />
-          <span className="recipient-name">{name}</span> <span className="heart">❤️</span>
+        <h1 className="birthday-greeting">
+          <span className="birthday-greeting-line text-accent">Happy Birthday,</span>
+          <br />
+          <span className="recipient-name text-accent"> My dear {name}</span>{' '}
+          <span className="heart" role="img" aria-label="heart">❤️</span>
         </h1>
 
         <div className="birthday-photo-moment">

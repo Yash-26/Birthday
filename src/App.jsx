@@ -18,7 +18,7 @@ import './App.css';
 
 function App() {
   useScrollReveal();
-  
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const audioRef = useRef(null);
@@ -42,9 +42,9 @@ function App() {
     setHasStarted(true);
     // Optionally start music if not already playing and user interaction happened
     if (!isPlaying && audioRef.current) {
-       audioRef.current.play().then(() => setIsPlaying(true)).catch(e => console.log("Audio play failed:", e));
+      audioRef.current.play().then(() => setIsPlaying(true)).catch(e => console.log("Audio play failed:", e));
     }
-    
+
     setTimeout(() => {
       document.getElementById('introduction')?.scrollIntoView({ behavior: 'smooth' });
     }, 1000);
@@ -61,7 +61,7 @@ function App() {
 
       {/* Global Audio Control */}
       {hasStarted && (
-        <button 
+        <button
           className="audio-toggle glass-panel"
           onClick={toggleMusic}
           aria-label={isPlaying ? "Mute music" : "Play music"}
@@ -104,11 +104,9 @@ function App() {
           <ConstellationFinale config={birthdayContent.constellation} />
         </section>
 
-        <section id="ending">
-          <FinalMessage content={birthdayContent.final} name={birthdayContent.recipientName} />
-        </section>
+
       </main>
-      
+
       {hasStarted && (
         <div className="progress-indicator">
           {/* Simple scroll progress could be added here */}

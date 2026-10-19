@@ -43,6 +43,12 @@ const FuturePlans = ({ plans }) => {
           <FuturePlanCard key={plan.id} plan={plan} index={index} />
         ))}
       </div>
+
+      <div className="future-highlight-container reveal reveal-delay-3">
+        <p className="future-highlight-text">
+          <em>And so many more, with you…</em>
+        </p>
+      </div>
     </div>
   );
 };

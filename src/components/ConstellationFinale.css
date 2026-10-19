@@ -136,6 +136,25 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+@media (max-width: 768px) {
+  .finale-constellation-wrapper {
+    max-width: 320px;
+  }
+
+  .finale-reveal-text {
+    margin-top: 2rem;
+    padding: 0 1rem;
+  }
+
+  .finale-reveal-text h2 {
+    font-size: clamp(1.6rem, 5.5vw, 2.2rem);
+  }
+
+  .hidden-star-text {
+    font-size: 1.05rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .finale-star {
     transition: opacity 1s ease !important;
