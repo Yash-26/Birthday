@@ -1,105 +1,58 @@
-.finale-container {
+.finale {
   width: 100%;
-  min-height: 80vh;
+  max-width: 480px;
+  min-height: calc(100dvh - 5rem);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: relative;
+  gap: 1rem;
+  text-align: center;
+}
+
+.finale-top-text {
+  min-height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
 }
 
 .finale-intro-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
+  font-family: var(--font-display);
   font-style: italic;
-  font-size: clamp(1.2rem, 3vw, 1.5rem);
-  opacity: 0;
-  animation: fade-in-out 4s forwards;
-  pointer-events: none;
-  z-index: 10;
+  font-size: clamp(1.1rem, 5vw, 1.4rem);
+  color: var(--color-text-main);
+  animation: fadeIn 1.5s ease both;
 }
 
-.finale-intro-text.fade-out {
-  opacity: 0 !important;
-  transition: opacity 2s ease;
+.finale-intro-text.waiting {
+  color: var(--color-accent-sakura);
+  animation: fadeIn 1.5s ease both, hint-breathe 2.4s ease-in-out 1.5s infinite;
 }
 
-@keyframes fade-in-out {
-  0% { opacity: 0; }
-  20% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-.finale-constellation-wrapper {
-  width: 100%;
-  max-width: 500px;
-  aspect-ratio: 1;
+.finale-sky {
   position: relative;
+  width: min(84vw, 360px);
+  aspect-ratio: 1;
   opacity: 0;
   transition: opacity 2s ease;
-  z-index: 1;
 }
 
-.finale-constellation-wrapper.visible {
+.finale-sky.visible {
   opacity: 1;
 }
 
 .finale-svg {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   overflow: visible;
 }
 
-.finale-star {
-  opacity: 0;
-  fill: #fff;
-  transition: left 4s cubic-bezier(0.4, 0, 0.2, 1), top 4s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s ease;
-  will-change: left, top, opacity;
-}
-
-.finale-star.appear {
-  opacity: 0.7;
-}
-
-.finale-star.glow {
-  opacity: 1;
-  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
-}
-
-.finale-star.special {
-  opacity: 0;
-  transition: opacity 2s ease;
-}
-
-.finale-star.appear-special {
-  opacity: 1;
-  animation: special-star-glow 3s infinite alternate;
-  transition: opacity 2s ease;
-}
-
-@keyframes special-star-glow {
-  0% { filter: drop-shadow(0 0 4px rgba(167, 139, 250, 0.6)); fill: #E2E8F0; }
-  100% { filter: drop-shadow(0 0 10px rgba(167, 139, 250, 1)); fill: #FBCFE8; }
-}
-
-/* Custom sizes for finale stars */
-.finale-star.s-node {
-  width: 8px;
-  height: 8px;
-}
-
-.finale-star.special-node {
-  width: 14px;
-  height: 14px;
-  fill: #FBCFE8;
-}
-
 .finale-path {
-  stroke: rgba(255, 255, 255, 0.4);
+  stroke: rgba(255, 255, 255, 0.45);
   stroke-width: 0.5;
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
@@ -112,60 +65,116 @@
   transition: stroke-dashoffset 4.5s ease-in-out, opacity 2s ease;
 }
 
-.finale-reveal-text {
-  margin-top: 3rem;
-  text-align: center;
-  animation: fadeIn 2s ease forwards;
-  z-index: 10;
+.finale-sky.complete .finale-path {
+  stroke: rgba(251, 207, 232, 0.7);
+  filter: drop-shadow(0 0 2px rgba(251, 207, 232, 0.9));
+  transition: stroke 1.5s ease;
 }
 
-.finale-reveal-text h2 {
-  font-size: clamp(2rem, 4vw, 3rem);
-  margin-bottom: 1rem;
-}
-
-.hidden-star-text {
-  font-size: clamp(1.1rem, 2vw, 1.3rem);
-  font-style: italic;
+.finale-star {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  transform: translate(-50%, -50%);
+  fill: #fff;
   opacity: 0;
-  animation: fadeIn 2s ease 2s forwards;
+  transition: left 4s cubic-bezier(0.4, 0, 0.2, 1), top 4s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+.finale-star.appear {
+  opacity: 0.7;
 }
 
-@media (max-width: 768px) {
-  .finale-constellation-wrapper {
-    max-width: 320px;
-  }
-
-  .finale-reveal-text {
-    margin-top: 2rem;
-    padding: 0 1rem;
-  }
-
-  .finale-reveal-text h2 {
-    font-size: clamp(1.6rem, 5.5vw, 2.2rem);
-  }
-
-  .hidden-star-text {
-    font-size: 1.05rem;
-  }
+.finale-star.glow {
+  opacity: 1;
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .finale-star {
-    transition: opacity 1s ease !important;
-  }
-  .finale-path.draw-in {
-    transition: opacity 1s ease !important;
-    stroke-dasharray: none;
-    stroke-dashoffset: none;
-  }
-  .hidden-star.appear-special {
-    animation: none;
-    filter: drop-shadow(0 0 4px rgba(167, 139, 250, 0.8));
-  }
+/* The pink star sits inside a 64px tap target */
+.me-star {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  transform: translate(-50%, -50%);
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 2s ease;
+}
+
+.me-star svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--color-accent-sakura);
+  transition: width 1s ease, height 1s ease;
+}
+
+.me-star.appear {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.me-star.appear svg {
+  animation: me-star-call 1.4s ease-in-out infinite;
+}
+
+.me-star.appear::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(251, 207, 232, 0.7);
+  animation: ripple 1.6s ease-out infinite;
+}
+
+.me-star.found::before {
+  display: none;
+}
+
+.me-star.found svg {
+  width: 26px;
+  height: 26px;
+  animation: me-star-shine 3s ease-in-out infinite alternate;
+}
+
+@keyframes me-star-call {
+  0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 6px rgba(251, 207, 232, 0.8)); }
+  50% { transform: scale(1.35) rotate(15deg); filter: drop-shadow(0 0 14px rgba(251, 207, 232, 1)); }
+}
+
+@keyframes me-star-shine {
+  0% { filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.8)); }
+  100% { filter: drop-shadow(0 0 20px rgba(251, 207, 232, 1)) drop-shadow(0 0 40px rgba(251, 207, 232, 0.6)); }
+}
+
+.finale-bottom-text {
+  min-height: 9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.5rem;
+}
+
+.finale-heading {
+  font-size: clamp(1.6rem, 7vw, 2.3rem);
+  text-wrap: balance;
+  animation: fadeIn 1.8s ease both;
+}
+
+.finale-sub {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--color-text-main);
+  animation: fadeIn 1.8s ease 1.6s both;
+}
+
+.finale-next {
+  margin-top: 1rem;
 }

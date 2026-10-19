@@ -1,199 +1,142 @@
-.future-container {
+.future {
   width: 100%;
-  max-width: 1200px;
+  max-width: 480px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3.5rem;
+  gap: 1.25rem;
 }
 
-.future-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2.25rem;
-  width: 100%;
-  padding: 1rem 0;
+.future-header {
+  animation: fadeIn 1s ease both;
 }
 
-.future-card {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  height: 100%;
-  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
-  position: relative;
+.future-header .scene-heading {
+  font-size: clamp(1.5rem, 6.4vw, 2.3rem);
 }
 
-.future-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
-}
-
-.future-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, rgba(251, 207, 232, 0.08) 0%, transparent 100%);
-  z-index: 1;
-  pointer-events: none;
-}
-
-.future-image-wrapper {
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  background: rgba(255, 255, 255, 0.04);
-  position: relative;
-  overflow: hidden;
-}
-
-.future-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.future-placeholder .placeholder-text {
-  color: var(--color-text-muted);
-  font-family: var(--font-body);
-  letter-spacing: 0.1em;
+.future-counter {
+  text-align: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  font-size: 0.85rem;
-  opacity: 0.6;
+  color: var(--color-accent-sakura);
 }
 
-.future-image {
+.scratch-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  animation: fadeIn 0.8s ease both;
+}
+
+.scratch-card {
+  position: relative;
+  width: min(80vw, 320px);
+  height: min(48dvh, 400px);
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(251, 207, 232, 0.25);
+  box-shadow: 0 0 30px rgba(167, 139, 250, 0.25), 0 18px 40px rgba(0, 0, 0, 0.5);
+  background: #0c0e23;
+}
+
+.scratch-image {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 15%;
-  display: block;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
 }
 
-.future-card:hover .future-image {
-  transform: scale(1.04);
+.scratch-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+  transition: opacity 0.9s ease;
 }
 
-.future-content {
-  padding: 1.75rem 1.5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  flex-grow: 1;
-  position: relative;
-  z-index: 2;
+.scratch-card.revealed .scratch-canvas {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.scratch-card.revealed {
+  box-shadow: 0 0 40px rgba(251, 207, 232, 0.4), 0 18px 40px rgba(0, 0, 0, 0.5);
+}
+
+.scratch-finger {
+  position: absolute;
+  left: 50%;
+  top: 68%;
+  font-size: 2rem;
+  pointer-events: none;
+  animation: finger-rub 1.6s ease-in-out infinite;
+}
+
+@keyframes finger-rub {
+  0%, 100% { transform: translateX(-90%) rotate(-10deg); }
+  50% { transform: translateX(-10%) rotate(10deg); }
+}
+
+.scratch-text {
+  text-align: center;
+  max-width: 360px;
+  min-height: 7.5rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.9s ease 0.3s, transform 0.9s ease 0.3s;
+}
+
+.scratch-text.shown {
+  opacity: 1;
+  transform: none;
 }
 
 .future-title {
-  font-family: var(--font-display);
   font-size: 1.35rem;
-  line-height: 1.35;
-  color: var(--color-text-main);
-  margin: 0;
+  color: var(--color-accent-sakura);
+  margin-bottom: 0.4rem;
 }
 
 .future-description {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   line-height: 1.6;
-  color: var(--color-text-muted);
-  opacity: 0.85;
-  margin: 0;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  color: var(--color-text-main);
 }
 
-@media (max-width: 992px) {
-  .future-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .future-container {
-    gap: 2.5rem;
-  }
-
-  .future-grid {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    padding: 0 1rem;
-    max-width: 420px;
-  }
-
-  .future-content {
-    padding: 1.5rem 1.25rem 1.75rem;
-  }
-
-  .future-highlight-text {
-    padding: 0.8rem 1.6rem;
-  }
-
-  .future-highlight-text em {
-    font-size: 1.15rem;
-  }
-}
-
-/* Highlighted Closing Line */
-.future-highlight-container {
+.future-footer {
+  min-height: 3.5rem;
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 100%;
-  margin-top: -0.5rem;
-  padding: 0 1rem;
 }
 
-.future-highlight-text {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
+.future-closing {
+  min-height: calc(100dvh - 5rem);
   justify-content: center;
-  margin: 0;
-  padding: 0.95rem 2.6rem;
-  border-radius: 9999px;
-  background: linear-gradient(
-    135deg,
-    rgba(251, 207, 232, 0.16) 0%,
-    rgba(167, 139, 250, 0.16) 50%,
-    rgba(96, 165, 250, 0.14) 100%
-  );
-  border: 1px solid rgba(251, 207, 232, 0.35);
-  box-shadow: 
-    0 10px 30px rgba(0, 0, 0, 0.35),
-    0 0 25px rgba(251, 207, 232, 0.22),
-    inset 0 0 16px rgba(251, 207, 232, 0.12);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
-  animation: pulse-glow 4s ease-in-out infinite;
+  gap: 0.25rem;
 }
 
-.future-highlight-text em {
+.future-closing-text {
   font-family: var(--font-display);
   font-style: italic;
-  font-size: clamp(1.2rem, 2.5vw, 1.7rem);
-  font-weight: 400;
-  letter-spacing: 0.03em;
-  color: #FFFFFF;
-  text-shadow: 
-    0 0 12px rgba(251, 207, 232, 0.6),
-    0 0 24px rgba(167, 139, 250, 0.35);
-  display: inline-block;
+  font-size: clamp(2rem, 9vw, 2.8rem);
+  color: var(--color-text-main);
+  animation: fadeIn 1.4s ease both;
 }
 
-.future-highlight-text:hover {
-  transform: translateY(-3px) scale(1.02);
-  border-color: rgba(251, 207, 232, 0.65);
-  box-shadow: 
-    0 14px 35px rgba(0, 0, 0, 0.45),
-    0 0 35px rgba(251, 207, 232, 0.35),
-    inset 0 0 20px rgba(167, 139, 250, 0.2);
+.future-closing-text.accent {
+  color: var(--color-accent-sakura);
+  animation-delay: 1s;
+}
+
+.future-closing-btn {
+  margin-top: 3rem;
+  animation-delay: 2.4s;
 }

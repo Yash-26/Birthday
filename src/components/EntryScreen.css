@@ -1,79 +1,121 @@
 .entry-screen {
   width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
-}
-
-.entry-screen.fade-out {
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(1.05);
-}
-
-.entry-content {
-  text-align: center;
-  z-index: 10;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  animation: fadeIn 2s ease-out forwards;
+  justify-content: center;
+  gap: 3rem;
+  text-align: center;
+}
+
+.entry-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  animation: fadeIn 2s ease-out both;
 }
 
 .entry-title {
-  font-size: clamp(3rem, 8vw, 6rem);
+  font-size: clamp(3rem, 14vw, 5.5rem);
   letter-spacing: -0.02em;
-  margin-bottom: 0.5rem;
 }
 
 .entry-subtitle {
-  font-size: clamp(1.1rem, 2vw, 1.5rem);
-  letter-spacing: 0.05em;
-  opacity: 0.8;
-}
-
-.btn-begin {
-  margin-top: 3rem;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.15rem, 5vw, 1.5rem);
   color: var(--color-text-main);
-  padding: 1rem 3rem;
-  border-radius: 30px;
-  font-family: var(--font-body);
-  font-size: 1.1rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
+  opacity: 0.85;
+}
+
+.hold-star {
   position: relative;
-  overflow: hidden;
-  transition: all 0.4s ease;
-  backdrop-filter: blur(10px);
+  width: 150px;
+  height: 150px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  animation: fadeIn 2s ease-out 0.8s both;
 }
 
-.btn-begin:hover {
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-2px);
-}
-
-.btn-glow {
+.hold-ring {
   position: absolute;
-  top: -25%;
-  left: -25%;
-  width: 150%;
-  height: 150%;
-  background: radial-gradient(circle, rgba(167, 139, 250, 0.4) 0%, transparent 70%);
-  transform: scale(0);
-  transition: transform 0.6s ease;
-  z-index: -1;
-  pointer-events: none;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
 }
 
-.btn-begin:hover .btn-glow {
-  transform: scale(1);
-  animation: pulse-glow 2s infinite;
+.hold-ring-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 2;
+}
+
+.hold-ring-fill {
+  fill: none;
+  stroke: var(--color-accent-sakura);
+  stroke-width: 3;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(251, 207, 232, 0.9));
+}
+
+.hold-star-shape {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 46px;
+  height: 46px;
+  transform: translate(-50%, -50%);
+  fill: #fff;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 22px rgba(167, 139, 250, 0.7));
+  animation: star-idle 3s ease-in-out infinite;
+  transition: width 0.4s ease, height 0.4s ease, fill 0.4s ease;
+}
+
+.hold-star.holding .hold-star-shape {
+  animation: star-shiver 0.18s linear infinite;
+  fill: var(--color-accent-sakura);
+}
+
+.hold-star.charged .hold-star-shape {
+  width: 64px;
+  height: 64px;
+  animation: none;
+  fill: var(--color-accent-sakura);
+}
+
+.hold-star-glow {
+  position: absolute;
+  inset: 25%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.45), transparent 70%);
+  animation: pulse-glow 3s ease-in-out infinite;
+  pointer-events: none;
+  transition: inset 0.4s ease;
+}
+
+.hold-star.holding .hold-star-glow,
+.hold-star.charged .hold-star-glow {
+  inset: 0;
+  background: radial-gradient(circle, rgba(251, 207, 232, 0.5), transparent 70%);
+}
+
+.entry-hint {
+  animation-delay: 1.6s;
+}
+
+@keyframes star-idle {
+  0%, 100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  50% { transform: translate(-50%, -50%) scale(1.12) rotate(8deg); }
+}
+
+@keyframes star-shiver {
+  0% { transform: translate(-50%, -50%) scale(1.1) rotate(-3deg); }
+  50% { transform: translate(-50%, -50%) scale(1.15) rotate(3deg); }
+  100% { transform: translate(-50%, -50%) scale(1.1) rotate(-3deg); }
 }

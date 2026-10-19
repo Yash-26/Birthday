@@ -1,9 +1,9 @@
 .app-container {
-  position: relative;
-  min-height: 100vh;
+  position: fixed;
+  inset: 0;
+  height: 100dvh;
+  overflow: hidden;
 }
-
-
 
 .ambient-glow {
   position: fixed;
@@ -11,63 +11,88 @@
   left: -20vw;
   width: 140vw;
   height: 140vh;
-  background: radial-gradient(circle at 50% 50%, rgba(167, 139, 250, 0.03) 0%, transparent 60%);
+  background: radial-gradient(circle at 50% 50%, rgba(167, 139, 250, 0.05) 0%, transparent 60%);
   z-index: -1;
   pointer-events: none;
 }
 
-main {
-  position: relative;
+/* Each scene fills the phone screen; tall scenes scroll inside themselves */
+.scene {
+  position: absolute;
+  inset: 0;
   z-index: 1;
-}
-
-section {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  padding: 4rem 2rem;
-  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding:
+    calc(3.25rem + env(safe-area-inset-top))
+    1.25rem
+    calc(1.5rem + env(safe-area-inset-bottom));
+  animation: scene-in 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  transition: opacity 0.7s ease, transform 0.7s ease, filter 0.7s ease;
+}
+
+.scene > * {
+  margin: auto 0;
+}
+
+.scene.leaving {
+  opacity: 0;
+  transform: scale(0.97);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+@keyframes scene-in {
+  from { opacity: 0; transform: scale(1.03); filter: blur(6px); }
+  to { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+/* Story-style progress at the top */
+.scene-progress {
+  position: fixed;
+  top: calc(1.1rem + env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.progress-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.18);
+  transition: all 0.5s ease;
+}
+
+.progress-dot.done {
+  background: rgba(251, 207, 232, 0.6);
+}
+
+.progress-dot.current {
+  width: 20px;
+  background: var(--color-accent-sakura);
+  box-shadow: 0 0 8px rgba(251, 207, 232, 0.7);
 }
 
 .audio-toggle {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 48px;
-  height: 48px;
+  top: calc(0.6rem + env(safe-area-inset-top));
+  right: 0.9rem;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--color-text-main);
-  z-index: 100;
+  z-index: 50;
   cursor: pointer;
-  transition: all 0.3s ease;
   border: 1px solid var(--glass-border);
-}
-
-.audio-toggle:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(167, 139, 250, 0.4);
-  border-color: rgba(167, 139, 250, 0.5);
-}
-
-/* Section specific margins */
-#entry {
-  padding: 0;
-}
-
-@media (max-width: 768px) {
-  section {
-    padding: 3rem 1.5rem;
-  }
-  
-  .audio-toggle {
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: 40px;
-    height: 40px;
-  }
 }

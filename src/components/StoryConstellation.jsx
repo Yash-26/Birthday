@@ -1,175 +1,177 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { X } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { vibrate } from '../utils/haptics';
 import './StoryConstellation.css';
 
-const StoryConstellation = ({ ourStory }) => {
-  const [activeMemory, setActiveMemory] = useState(null);
-  const overlayRef = useRef(null);
-  const modalRef = useRef(null);
+// Five stars that, connected in order, outline a heart
+const POSITIONS = [
+  { x: 50, y: 86 }, // bottom tip
+  { x: 16, y: 46 }, // mid left
+  { x: 33, y: 18 }, // top left
+  { x: 67, y: 18 }, // top right
+  { x: 84, y: 46 }, // mid right
+];
 
-  // Positions for the constellation nodes to make it look organic
-  const positions = [
-    { top: '85%', left: '50%' }, // Bottom
-    { top: '50%', left: '22%' }, // Mid Left
-    { top: '25%', left: '35%' }, // Top Left
-    { top: '25%', left: '65%' }, // Top Right
-    { top: '50%', left: '78%' }  // Mid Right
-  ];
+const SWIPE_THRESHOLD = 50;
 
-  const handleNodeClick = (memory) => {
-    setActiveMemory(memory);
-  };
-
-  const closeMenu = () => {
-    setActiveMemory(null);
-  };
+const StoryConstellation = ({ ourStory, onNext }) => {
+  const memories = ourStory.slice(0, POSITIONS.length);
+  const [unlocked, setUnlocked] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [wrongIndex, setWrongIndex] = useState(null);
+  const swipeStartRef = useRef(null);
+  const isComplete = unlocked >= memories.length;
 
   useEffect(() => {
-    if (!activeMemory) return;
-
-    // Record the exact scroll position when opening the modal
-    const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
-
-    // Save previous inline styles
-    const prevBodyOverflow = document.body.style.overflow;
-    const prevHtmlOverflow = document.documentElement.style.overflow;
-    const prevTouchAction = document.body.style.touchAction;
-
-    // Lock scrolling on the underlying page
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.touchAction = 'none';
-
-    // Support closing via Escape key
+    if (activeIndex === null) return;
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        setActiveMemory(null);
-      }
+      if (e.key === 'Escape') setActiveIndex(null);
     };
-
-    // Prevent touch scrolling gestures from leaking to the background
-    const overlay = overlayRef.current;
-
-    const handleTouchMove = (e) => {
-      const modal = modalRef.current;
-      if (modal && modal.contains(e.target)) {
-        // If the modal content is larger than viewport and scrollable, allow it inside
-        if (modal.scrollHeight > modal.clientHeight) {
-          e.stopPropagation();
-          return;
-        }
-      }
-      // Prevent background scrolling
-      if (e.cancelable) {
-        e.preventDefault();
-      }
-    };
-
-    const handleWheel = (e) => {
-      const modal = modalRef.current;
-      if (modal && modal.contains(e.target)) {
-        if (modal.scrollHeight > modal.clientHeight) {
-          const isAtTop = modal.scrollTop === 0 && e.deltaY < 0;
-          const isAtBottom = modal.scrollTop + modal.clientHeight >= modal.scrollHeight - 1 && e.deltaY > 0;
-          if (!isAtTop && !isAtBottom) {
-            e.stopPropagation();
-            return;
-          }
-        }
-      }
-      if (e.cancelable) {
-        e.preventDefault();
-      }
-    };
-
-    if (overlay) {
-      overlay.addEventListener('touchmove', handleTouchMove, { passive: false });
-      overlay.addEventListener('wheel', handleWheel, { passive: false });
-    }
     window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeIndex]);
 
-    return () => {
-      document.body.style.overflow = prevBodyOverflow;
-      document.documentElement.style.overflow = prevHtmlOverflow;
-      document.body.style.touchAction = prevTouchAction;
+  const handleStarTap = (index) => {
+    if (index < unlocked) {
+      vibrate(8);
+      setActiveIndex(index);
+    } else if (index === unlocked) {
+      vibrate([12, 30, 12]);
+      setUnlocked(index + 1);
+      setActiveIndex(index);
+    } else {
+      vibrate([30, 40, 30]);
+      setWrongIndex(index);
+      setTimeout(() => setWrongIndex(null), 600);
+    }
+  };
 
-      if (overlay) {
-        overlay.removeEventListener('touchmove', handleTouchMove);
-        overlay.removeEventListener('wheel', handleWheel);
-      }
-      window.removeEventListener('keydown', handleKeyDown);
+  const showMemory = (direction) => {
+    setActiveIndex((current) => {
+      const next = current + direction;
+      return next >= 0 && next < unlocked ? next : current;
+    });
+  };
 
-      // Re-anchor to the exact scroll position
-      window.scrollTo({ top: scrollY, behavior: 'instant' });
-    };
-  }, [activeMemory]);
+  const handleSwipeStart = (e) => {
+    swipeStartRef.current = e.clientX;
+  };
+
+  const handleSwipeEnd = (e) => {
+    if (swipeStartRef.current === null) return;
+    const dx = e.clientX - swipeStartRef.current;
+    swipeStartRef.current = null;
+    if (Math.abs(dx) > SWIPE_THRESHOLD) showMemory(dx < 0 ? 1 : -1);
+  };
+
+  const linePoints = POSITIONS.slice(0, Math.max(unlocked, 0));
+  const activeMemory = activeIndex !== null ? memories[activeIndex] : null;
+
+  let hint = 'Tap the brightest star to begin';
+  if (wrongIndex !== null) hint = 'Not that one yet… follow the glow ✨';
+  else if (isComplete) hint = 'Every star led me to you';
+  else if (unlocked > 0) hint = 'Now find the next glowing star';
 
   return (
-    <div className="constellation-container">
-      <div className="section-header reveal">
-        <h2 className="text-gradient">Our Story</h2>
-        <p>A constellation of us.</p>
+    <div className="story">
+      <div className="story-header">
+        <h2 className="scene-heading text-gradient">Our Story</h2>
+        <p className="scene-subheading">A constellation of us.</p>
       </div>
 
-      <div className="constellation-map reveal reveal-delay-2">
-        {/* Draw lines between nodes using SVG */}
-        <svg className="constellation-lines" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-           <path 
-             d="M 50 85 C 50 85, 15 55, 15 35 C 15 15, 45 15, 50 35 C 55 15, 85 15, 85 35 C 85 55, 50 85, 50 85" 
-             stroke="rgba(255,255,255,0.15)" 
-             strokeWidth="0.5" 
-             strokeDasharray="2,2" 
-             fill="none" 
-           />
+      <div className={`story-map ${isComplete ? 'complete' : ''}`}>
+        <svg className="story-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          {linePoints.slice(1).map((point, i) => (
+            <line
+              key={`line-${i}`}
+              className="story-line"
+              x1={linePoints[i].x}
+              y1={linePoints[i].y}
+              x2={point.x}
+              y2={point.y}
+              pathLength="1"
+            />
+          ))}
+          {isComplete && (
+            <line
+              className="story-line"
+              x1={POSITIONS[POSITIONS.length - 1].x}
+              y1={POSITIONS[POSITIONS.length - 1].y}
+              x2={POSITIONS[0].x}
+              y2={POSITIONS[0].y}
+              pathLength="1"
+            />
+          )}
         </svg>
 
-        {ourStory.slice(0, 5).map((memory, index) => (
-          <div 
-            key={memory.id}
-            className={`constellation-node-wrapper node-${index}`}
-            style={{ 
-              top: positions[index]?.top || '50%', 
-              left: positions[index]?.left || '50%' 
-            }}
-          >
-            <button 
-              className="constellation-node"
-              onClick={() => handleNodeClick(memory)}
-              aria-label={`Open memory: ${memory.title}`}
+        {isComplete && (
+          <svg className="story-heart-glow" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.2 1.7-2 3.2-3.2 5.3-3.2 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z" />
+          </svg>
+        )}
+
+        {memories.map((memory, index) => {
+          const state = index < unlocked ? 'visited' : index === unlocked ? 'next' : 'locked';
+          return (
+            <div
+              key={memory.id}
+              className={`story-star-wrapper star-${index} ${state} ${wrongIndex === index ? 'wrong' : ''}`}
+              style={{ left: `${POSITIONS[index].x}%`, top: `${POSITIONS[index].y}%` }}
             >
-              <div className="node-glow"></div>
-            </button>
-            <span className="node-label">{memory.title}</span>
-          </div>
-        ))}
+              <button
+                className="story-star"
+                onClick={() => handleStarTap(index)}
+                aria-label={state === 'visited' ? `Open memory: ${memory.title}` : `Star ${index + 1}`}
+              >
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                  <path d="M50 0 Q50 50 100 50 Q50 50 50 100 Q50 50 0 50 Q50 50 50 0 Z" />
+                </svg>
+              </button>
+              {state === 'visited' && <span className="story-star-label">{memory.title}</span>}
+            </div>
+          );
+        })}
       </div>
 
-      {/* Memory Modal */}
+      <div className="story-footer">
+        <p className="scene-hint story-hint" key={hint}>{hint}</p>
+        {isComplete && activeIndex === null && (
+          <button className="btn-soft" onClick={onNext}>You, in my favourite memories</button>
+        )}
+      </div>
+
       {activeMemory && (
-        <div 
-          ref={overlayRef}
-          className="memory-modal-overlay" 
-          onClick={closeMenu}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="story-modal-title"
-        >
-          <div 
-            ref={modalRef}
-            className="memory-modal glass-panel" 
+        <div className="memory-overlay" onClick={() => setActiveIndex(null)} role="dialog" aria-modal="true" aria-labelledby="memory-title">
+          <div
+            className="memory-card glass-panel"
+            key={activeMemory.id}
             onClick={(e) => e.stopPropagation()}
+            onPointerDown={handleSwipeStart}
+            onPointerUp={handleSwipeEnd}
+            onPointerCancel={() => { swipeStartRef.current = null; }}
           >
-            <button className="modal-close" onClick={closeMenu} aria-label="Close memory">
-              <X size={24} />
+            <button className="memory-close" onClick={() => setActiveIndex(null)} aria-label="Close memory">
+              <X size={22} />
             </button>
-            <div className="modal-image-container">
-               <img src={activeMemory.image} alt="" className="modal-image-blur" aria-hidden="true" />
-               <img src={activeMemory.image} alt={activeMemory.title} className="modal-image" loading="lazy" decoding="async" onError={(e) => e.target.style.display='none'} />
+            <div className="memory-image">
+              <img src={activeMemory.image} alt="" className="memory-image-blur" aria-hidden="true" />
+              <img src={activeMemory.image} alt={activeMemory.title} className="memory-image-main" decoding="async" />
             </div>
-            <div className="modal-content">
-              <h3 id="story-modal-title" className="modal-title">{activeMemory.title}</h3>
-              <p className="modal-description">{activeMemory.description}</p>
+            <div className="memory-body">
+              <h3 id="memory-title" className="memory-title">{activeMemory.title}</h3>
+              <p className="memory-description">{activeMemory.description}</p>
             </div>
+            {unlocked > 1 && (
+              <div className="memory-nav">
+                <button onClick={() => showMemory(-1)} disabled={activeIndex === 0} aria-label="Previous memory">
+                  <ChevronLeft size={20} />
+                </button>
+                <span>{activeIndex + 1} / {unlocked}</span>
+                <button onClick={() => showMemory(1)} disabled={activeIndex >= unlocked - 1} aria-label="Next memory">
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

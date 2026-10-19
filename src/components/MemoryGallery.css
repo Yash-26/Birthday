@@ -1,188 +1,85 @@
-.gallery-container {
+.moments {
   width: 100%;
-  max-width: 1200px;
-  position: relative;
+  max-width: 480px;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-}
-
-.gallery-header {
-  text-align: left;
-  padding-left: 2rem;
-}
-
-.gallery-header h2 {
-  font-size: clamp(2rem, 5vw, 3.5rem);
-}
-
-.gallery-controls {
-  position: absolute;
-  top: 0;
-  right: 2rem;
-  display: flex;
-  gap: 1rem;
-}
-
-.gallery-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  color: var(--color-text-main);
-  cursor: pointer;
-  transition: all 0.3s ease;
+  gap: 1.75rem;
 }
 
-.gallery-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: scale(1.05);
+.moments-header {
+  animation: fadeIn 1s ease both;
 }
 
-.gallery-track {
-  display: flex;
-  align-items: stretch;
-  gap: 2rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding: 1rem 2rem 3rem 2rem;
-  scrollbar-width: none; /* Firefox */
+.polaroid-stack {
+  position: relative;
+  width: min(78vw, 320px);
+  aspect-ratio: 0.8;
+  max-height: 60dvh;
+  margin-top: 0.5rem;
 }
 
-.gallery-track::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
-}
-
-.gallery-item {
-  width: 300px;
-  min-width: 300px;
-  max-width: 300px;
-  flex: 0 0 300px;
-  scroll-snap-align: center;
+.polaroid {
+  position: absolute;
+  inset: 0;
+  background: #fbf8f3;
+  border-radius: 6px;
+  padding: 10px 10px 0;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  will-change: transform;
+}
+
+.polaroid.top {
+  touch-action: none;
+  cursor: grab;
+  animation: polaroid-in 0.5s ease both;
+}
+
+@keyframes polaroid-in {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
+
+.polaroid-photo {
+  flex: 1;
   overflow: hidden;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  border-radius: 2px;
+  background: #e8e3dc;
 }
 
-.gallery-item:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-}
-
-.gallery-image-wrapper {
-  width: 100%;
-  aspect-ratio: 1/1;
-  background: #000;
-  position: relative;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.gallery-image-blur {
-  position: absolute;
-  top: 0;
-  left: 0;
+.polaroid-photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: blur(20px) brightness(0.5);
-  transform: scale(1.1);
-  z-index: 1;
-  transition: transform 0.5s ease;
-}
-
-.gallery-image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  transition: transform 0.5s ease;
-}
-
-.gallery-item:hover .gallery-image-blur {
-  transform: scale(1.15);
-}
-
-.gallery-item:hover .gallery-image {
-  transform: scale(1.05);
-}
-
-.gallery-caption {
-  padding: 1.25rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex: 1;
-  min-height: 4.75rem;
-}
-
-.gallery-title {
-  font-family: var(--font-body);
-  font-weight: 500;
-  font-size: 1.05rem;
-  line-height: 1.4;
-  margin: 0;
-  word-break: break-word;
-}
-
-.empty-item .gallery-image-wrapper {
-  border: 1px dashed rgba(255, 255, 255, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.empty-item .image-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.empty-item .placeholder-text {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  opacity: 0.6;
-}
-
-.empty-caption {
   pointer-events: none;
 }
 
-@media (max-width: 768px) {
-  .gallery-header {
-    padding-left: 1rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .gallery-controls {
-    top: 0.25rem;
-    right: 1rem;
-    bottom: auto;
-    transform: none;
-    gap: 0.5rem;
-  }
+.polaroid-caption {
+  font-family: var(--font-hand);
+  font-size: clamp(1.15rem, 5vw, 1.4rem);
+  line-height: 1.15;
+  color: #3b2f45;
+  text-align: center;
+  padding: 0.6rem 0.4rem 0.8rem;
+  min-height: 3.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .gallery-btn {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .gallery-item {
-    width: 260px;
-    min-width: 260px;
-    max-width: 260px;
-    flex: 0 0 260px;
-  }
-  
-  .gallery-track {
-    padding: 0.5rem 1rem 1.5rem 1rem;
-  }
+.moments-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 0.75rem;
+  min-height: 5rem;
+}
+
+.moments-count {
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  color: var(--color-accent-sakura);
 }

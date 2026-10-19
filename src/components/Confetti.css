@@ -1,0 +1,38 @@
+.confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 60;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -6vh;
+  left: var(--left);
+  width: var(--size);
+  height: calc(var(--size) * 0.6);
+  background: var(--color);
+  opacity: 0;
+  animation: confetti-fall var(--duration) cubic-bezier(0.25, 0.6, 0.5, 1) var(--delay) forwards;
+}
+
+.confetti-piece.circle {
+  height: var(--size);
+  border-radius: 50%;
+}
+
+.confetti-piece.heart {
+  background: none;
+  color: var(--color);
+  font-size: calc(var(--size) * 1.7);
+  line-height: 1;
+  width: auto;
+  height: auto;
+}
+
+@keyframes confetti-fall {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+  85% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--drift), 112vh) rotate(var(--spin)); }
+}

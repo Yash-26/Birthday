@@ -1,117 +1,95 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import { birthdayContent } from './data/birthdayContent';
-import { useScrollReveal } from './hooks/useScrollReveal';
+import { useBackgroundMusic } from './hooks/useBackgroundMusic';
 
 import StarField from './components/StarField';
-import './components/StarField.css';
 import EntryScreen from './components/EntryScreen';
 import Introduction from './components/Introduction';
 import StoryConstellation from './components/StoryConstellation';
 import MemoryGallery from './components/MemoryGallery';
 import BirthdayReveal from './components/BirthdayReveal';
-import VideoSection from './components/VideoSection';
 import FuturePlans from './components/FuturePlans';
 import ConstellationFinale from './components/ConstellationFinale';
-import FinalMessage from './components/FinalMessage';
+import GiftScene from './components/GiftScene';
 import './App.css';
 
+const SCENE_COUNT = 8;
+const SCENE_EXIT_MS = 700;
+
+// While developing, jump straight to a scene with ?scene=4 (ignored in the real build)
+function getInitialScene() {
+  if (!import.meta.env.DEV) return 0;
+  const scene = Number(new URLSearchParams(window.location.search).get('scene'));
+  return Number.isInteger(scene) && scene > 0 && scene < SCENE_COUNT ? scene : 0;
+}
+
 function App() {
-  useScrollReveal();
+  const [sceneIndex, setSceneIndex] = useState(getInitialScene);
+  const [isLeaving, setIsLeaving] = useState(false);
+  const leavingRef = useRef(false);
+  const music = useBackgroundMusic(birthdayContent.music.src);
+  const name = birthdayContent.recipientName;
 
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
-  const audioRef = useRef(null);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.3;
-    }
+  const goNext = useCallback(() => {
+    if (leavingRef.current) return;
+    leavingRef.current = true;
+    setIsLeaving(true);
+    setTimeout(() => {
+      setSceneIndex((i) => Math.min(i + 1, SCENE_COUNT - 1));
+      setIsLeaving(false);
+      leavingRef.current = false;
+    }, SCENE_EXIT_MS);
   }, []);
 
-  const toggleMusic = () => {
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play().catch(e => console.log("Audio play failed:", e));
-    }
-    setIsPlaying(!isPlaying);
-  };
-
   const handleStart = () => {
-    setHasStarted(true);
-    // Optionally start music if not already playing and user interaction happened
-    if (!isPlaying && audioRef.current) {
-      audioRef.current.play().then(() => setIsPlaying(true)).catch(e => console.log("Audio play failed:", e));
-    }
-
-    setTimeout(() => {
-      document.getElementById('introduction')?.scrollIntoView({ behavior: 'smooth' });
-    }, 1000);
+    music.start();
+    goNext();
   };
+
+  const scenes = [
+    <EntryScreen key="entry" content={birthdayContent.opening} name={name} onStart={handleStart} />,
+    <Introduction key="intro" lines={birthdayContent.introduction} onNext={goNext} />,
+    <StoryConstellation key="story" ourStory={birthdayContent.ourStory} onNext={goNext} />,
+    <MemoryGallery key="moments" moments={birthdayContent.moments} onNext={goNext} />,
+    <BirthdayReveal key="birthday" content={birthdayContent.birthday} name={name} onNext={goNext} />,
+    <FuturePlans key="future" plans={birthdayContent.future} onNext={goNext} />,
+    <ConstellationFinale key="finale" onNext={goNext} />,
+    <GiftScene key="gift" video={birthdayContent.video} music={music} />,
+  ];
 
   return (
     <div className="app-container">
-      {/* Background elements */}
       <StarField />
       <div className="ambient-glow"></div>
 
-      {/* Audio Element */}
-      <audio ref={audioRef} src={birthdayContent.music.src} loop />
+      {sceneIndex > 0 && (
+        <div className="scene-progress" aria-hidden="true">
+          {Array.from({ length: SCENE_COUNT - 1 }, (_, i) => (
+            <span
+              key={i}
+              className={`progress-dot ${i + 1 < sceneIndex ? 'done' : ''} ${i + 1 === sceneIndex ? 'current' : ''}`}
+            />
+          ))}
+        </div>
+      )}
 
-      {/* Global Audio Control */}
-      {hasStarted && (
+      {sceneIndex > 0 && music.isAvailable && (
         <button
           className="audio-toggle glass-panel"
-          onClick={toggleMusic}
-          aria-label={isPlaying ? "Mute music" : "Play music"}
+          onClick={music.toggle}
+          aria-label={music.isPlaying ? 'Mute music' : 'Play music'}
         >
-          {isPlaying ? <Volume2 size={20} /> : <VolumeX size={20} />}
+          {music.isPlaying ? <Volume2 size={18} /> : <VolumeX size={18} />}
         </button>
       )}
 
-      {/* Main Content Flow */}
-      <main>
-        <section id="entry">
-          <EntryScreen content={birthdayContent.opening} onStart={handleStart} hasStarted={hasStarted} />
-        </section>
-
-        <section id="introduction">
-          <Introduction content={birthdayContent.introduction} />
-        </section>
-
-        <section id="story">
-          <StoryConstellation ourStory={birthdayContent.ourStory} />
-        </section>
-
-        <section id="gallery">
-          <MemoryGallery moments={birthdayContent.moments} />
-        </section>
-
-        <section id="birthday-reveal">
-          <BirthdayReveal content={birthdayContent.birthday} name={birthdayContent.recipientName} />
-        </section>
-
-        <section id="video">
-          <VideoSection content={birthdayContent.video} />
-        </section>
-
-        <section id="future">
-          <FuturePlans plans={birthdayContent.future} />
-        </section>
-
-        <section id="finale">
-          <ConstellationFinale config={birthdayContent.constellation} />
-        </section>
-
-
+      <main
+        key={sceneIndex}
+        className={`scene ${isLeaving ? 'leaving' : ''}`}
+      >
+        {scenes[sceneIndex]}
       </main>
-
-      {hasStarted && (
-        <div className="progress-indicator">
-          {/* Simple scroll progress could be added here */}
-        </div>
-      )}
     </div>
   );
 }

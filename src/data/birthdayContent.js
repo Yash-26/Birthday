@@ -1,22 +1,20 @@
 export const birthdayContent = {
   recipientName: "Suvi",
-  nickname: "[NICKNAME]",
 
   opening: {
-    title: "For you.",
-    subtitle: "A little something made only for you"
+    subtitle: "I made you a little universe.",
+    hint: "Press & hold the star to step in"
   },
 
   introduction: [
     "I wish I could be there today.",
-    "Not just to wish you a happy birthday,",
-    "but to actually see your face when I say it.",
-    "To spend the day with you.",
-    "To make you smile.",
-    "To be there for all the little moments.",
-    "But this time, being there isn't possible.",
-    "So I found another way to be a little closer to you.",
-
+    "Not just to say happy birthday,",
+    "but to see your face when I say it.",
+    "To hold your hand. To make you laugh. To steal a few of your smiles.",
+    "There are too many kilometres between us right now —",
+    "but none of them ever made me love you any less.",
+    "So I built something to close the distance, just a little.",
+    "For a little while, let me be right there with you. 🤍"
   ],
 
   ourStory: [
@@ -80,15 +78,14 @@ export const birthdayContent = {
     },
   ],
 
-
   birthday: {
+    preReveal: [
+      "Somehow, in this vast universe, life brought me to you.",
+      "And today, I get to celebrate you."
+    ],
+    popWords: ["You", "are", "my", "favourite", "person"],
     message: "I hope this little universe reminds you how deeply loved you are.",
     image: "/assets/images/miha3.jpg"
-  },
-
-  video: {
-    src: "/assets/video/birthday-message.mp4",
-    poster: "/assets/images/video-poster.jpg"
   },
 
   future: [
@@ -96,27 +93,20 @@ export const birthdayContent = {
       id: "future-1",
       title: "Our Sunset by the Sea",
       description: "Someday, I want to watch the sky turn gold over the sea with you beside me, with nowhere else we need to be.",
-      image: "/assets/images/future-01.png",
+      image: "/assets/images/future-01.jpg",
       objectPosition: "center 15%"
     },
     {
       id: "future-2",
       title: "Cuddled Close Under the Stars",
       description: "Someday, I want to cuddle close with you beneath the stars you love, watching your eyes light up at the beautiful night sky while I quietly enjoy having you in my arms.",
-      image: "/assets/images/future-02.png",
+      image: "/assets/images/future-02.jpg",
       objectPosition: "center 20%"
     },
-
   ],
 
-  final: {
-    message: "This isn't where our story ends.\nThere's still so much left to experience together.",
-    closing: "I'll see you in the next chapter.",
-    signature: "Happy Birthday, [HER NAME]. ❤️"
-  },
-
-  constellation: {
-    finalShape: "S" // The shape rendered in the finale (currently customized to 'S')
+  video: {
+    src: "/assets/video/birthday-message.mp4"
   },
 
   music: {
