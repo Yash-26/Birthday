@@ -24,11 +24,18 @@ function getInitialScene() {
   return Number.isInteger(scene) && scene > 0 && scene < SCENE_COUNT ? scene : 0;
 }
 
+// Temporary while choosing the song: ?song=2 plays the alternative (works on the live site too)
+function getMusicSrc() {
+  const { src, alternative } = birthdayContent.music;
+  const wantsAlternative = new URLSearchParams(window.location.search).get('song') === '2';
+  return wantsAlternative && alternative ? alternative : src;
+}
+
 function App() {
   const [sceneIndex, setSceneIndex] = useState(getInitialScene);
   const [isLeaving, setIsLeaving] = useState(false);
   const leavingRef = useRef(false);
-  const music = useBackgroundMusic(birthdayContent.music.src);
+  const music = useBackgroundMusic(getMusicSrc());
   const name = birthdayContent.recipientName;
 
   const goNext = useCallback(() => {
