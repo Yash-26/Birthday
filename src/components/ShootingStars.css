@@ -1,3 +1,4 @@
+/* Not positioned on purpose: the sky layer then fills the whole scene, not a box */
 .stars-game {
   width: 100%;
   max-width: 520px;
@@ -8,7 +9,30 @@
   text-align: center;
 }
 
-/* Room for two lines from the start, so the sky doesn't jump when the line wraps */
+.stars-text,
+.wish-sentence,
+.stars-hint {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* The whole screen is the sky */
+.sky-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Keeps the layout's open sky area where stars mostly cross */
+.sky-space {
+  width: 100%;
+  height: min(42dvh, 360px);
+}
+
+/* Words wait unlit in their places and light up one by one */
 .wish-sentence {
   min-height: 6rem;
   display: flex;
@@ -22,37 +46,51 @@
   color: var(--color-accent-sakura);
 }
 
-.wish-word {
-  animation: word-land 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
 .wish-break {
   flex-basis: 100%;
   height: 0;
 }
 
-.wish-sentence.complete .wish-word {
-  text-shadow: 0 0 18px rgba(251, 207, 232, 0.85);
+.wish-word,
+.wish-heart {
+  opacity: 0;
+}
+
+.wish-word.lit {
+  animation: word-ignite 1.4s ease-out forwards;
 }
 
 .wish-heart {
   font-size: 0.8em;
-  animation: word-land 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
-@keyframes word-land {
-  from { opacity: 0; transform: translateY(-14px) scale(0.6); filter: blur(4px); }
-  to { opacity: 1; transform: none; filter: blur(0); }
+.wish-heart.lit {
+  animation: word-ignite 1.6s ease-out 0.4s forwards;
 }
 
-/* The night sky the stars cross */
-.sky-field {
-  position: relative;
-  width: 100%;
-  height: min(46dvh, 380px);
-  overflow: hidden;
-  border-radius: 20px;
-  background: radial-gradient(ellipse at 50% 40%, rgba(167, 139, 250, 0.08), transparent 70%);
+.wish-sentence.complete .wish-word {
+  animation: word-ignite 1.4s ease-out forwards, sentence-glow 3s ease-in-out 1.4s infinite alternate;
+}
+
+@keyframes word-ignite {
+  0% {
+    opacity: 0;
+    transform: scale(1.35);
+    color: #fff;
+    text-shadow: 0 0 6px #fff, 0 0 22px #fff, 0 0 40px rgba(251, 207, 232, 1);
+  }
+  30% { opacity: 1; }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    color: var(--color-accent-sakura);
+    text-shadow: 0 0 10px rgba(251, 207, 232, 0.55);
+  }
+}
+
+@keyframes sentence-glow {
+  from { text-shadow: 0 0 10px rgba(251, 207, 232, 0.55); }
+  to { text-shadow: 0 0 22px rgba(251, 207, 232, 0.95); }
 }
 
 /* A 76px catch area around the star's head, rotated to its direction of travel */
@@ -67,14 +105,15 @@
   border: none;
   background: transparent;
   cursor: pointer;
+  pointer-events: auto;
   touch-action: manipulation;
   animation: shoot var(--duration) linear forwards;
 }
 
 @keyframes shoot {
   0% { transform: translate(var(--x1), var(--y1)) rotate(var(--angle)); opacity: 0; }
-  8% { opacity: 1; }
-  92% { opacity: 1; }
+  6% { opacity: 1; }
+  94% { opacity: 1; }
   100% { transform: translate(var(--x2), var(--y2)) rotate(var(--angle)); opacity: 0; }
 }
 
@@ -111,43 +150,78 @@
   pointer-events: none;
 }
 
-/* Sparkle where she caught it */
-.catch-burst {
+/* Where she caught it: a soft halo and a little stardust drifting down */
+.catch-bloom {
   position: absolute;
   width: 0;
   height: 0;
-  pointer-events: none;
 }
 
-.catch-flash {
+.catch-halo {
   position: absolute;
-  width: 70px;
-  height: 70px;
-  margin: -35px;
+  width: 90px;
+  height: 90px;
+  margin: -45px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.95), rgba(251, 207, 232, 0.5) 35%, transparent 70%);
-  animation: catch-flash 0.7s ease-out forwards;
+  border: 1px solid rgba(251, 207, 232, 0.6);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.55), rgba(251, 207, 232, 0.25) 30%, transparent 65%);
+  animation: halo-bloom 1.6s ease-out forwards;
 }
 
-@keyframes catch-flash {
-  0% { transform: scale(0.3); opacity: 1; }
-  100% { transform: scale(2.2); opacity: 0; }
+@keyframes halo-bloom {
+  0% { transform: scale(0.2); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
 }
 
-.catch-burst i {
+.catch-bloom i {
   position: absolute;
-  width: 6px;
-  height: 6px;
-  margin: -3px;
+  width: 3px;
+  height: 3px;
+  margin: -1.5px;
   border-radius: 50%;
-  background: var(--color-accent-sakura);
-  box-shadow: 0 0 8px var(--color-accent-sakura);
-  animation: catch-spark 0.8s ease-out forwards;
+  background: #fff;
+  box-shadow: 0 0 6px rgba(251, 207, 232, 0.9);
+  opacity: 0;
+  animation: stardust-fall 2s ease-out forwards;
 }
 
-@keyframes catch-spark {
-  0% { opacity: 1; transform: rotate(var(--angle)) translateX(0); }
-  100% { opacity: 0; transform: rotate(var(--angle)) translateX(56px); }
+@keyframes stardust-fall {
+  0% { opacity: 1; transform: translate(0, 0); }
+  100% { opacity: 0; transform: translate(var(--dx), calc(var(--dy) + 46px)); }
+}
+
+/* The caught star's light gliding up to its word. X and Y use different easing,
+   so it travels in a soft arc instead of a straight line. */
+.star-light {
+  position: absolute;
+  width: 0;
+  height: 0;
+  animation: light-glide-x 1.2s cubic-bezier(0.45, 0, 0.25, 1) forwards;
+}
+
+.star-light-glow {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  margin: -7px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow:
+    0 0 10px 4px #fff,
+    0 0 26px 10px rgba(251, 207, 232, 0.85),
+    0 0 50px 18px rgba(167, 139, 250, 0.4);
+  animation: light-glide-y 1.2s cubic-bezier(0.3, -0.35, 0.6, 1) forwards;
+}
+
+@keyframes light-glide-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(var(--dx)); }
+}
+
+@keyframes light-glide-y {
+  0% { transform: translateY(0) scale(1); }
+  85% { transform: translateY(var(--dy)) scale(0.9); opacity: 1; }
+  100% { transform: translateY(var(--dy)) scale(0.4); opacity: 0; }
 }
 
 .stars-hint {
