@@ -1,19 +1,47 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { vibrate } from '../utils/haptics';
 import './EntryScreen.css';
 
 const HOLD_MS = 1300;
 const RING_RADIUS = 54;
 const RING_LENGTH = 2 * Math.PI * RING_RADIUS;
+const GATHER_STAR_COUNT = 34;
 
-const EntryScreen = ({ content, name, onStart }) => {
+const STAR_PATH = 'M50 0 Q50 50 100 50 Q50 50 50 100 Q50 50 0 50 Q50 50 50 0 Z';
+
+// Stars scattered around the screen (offsets from the hold star, in vw/vh)
+// that drift in and brighten while she holds
+function makeGatherStars() {
+  const stars = [];
+  while (stars.length < GATHER_STAR_COUNT) {
+    const x = Math.random() * 96 - 48;
+    const y = Math.random() * 90 - 45;
+    if (Math.abs(x) < 14 && Math.abs(y) < 9) continue; // keep clear of the star itself
+    stars.push({
+      id: stars.length,
+      style: {
+        '--x': `${x.toFixed(1)}vw`,
+        '--y': `${y.toFixed(1)}vh`,
+        '--o': (0.15 + Math.random() * 0.35).toFixed(2),
+        '--size': `${(1.5 + Math.random() * 2.5).toFixed(1)}px`,
+      },
+    });
+  }
+  return stars;
+}
+
+// Her name writes itself in like the start of a letter. Holding the star
+// gathers the sky around it; letting go blooms into light and opens the site.
+const EntryScreen = ({ content, onStart }) => {
   const [progress, setProgress] = useState(0);
   const [isHolding, setIsHolding] = useState(false);
   const [isCharged, setIsCharged] = useState(false);
+  const [isBlooming, setIsBlooming] = useState(false);
   const rafRef = useRef(null);
   const startTimeRef = useRef(0);
   const chargedRef = useRef(false);
   const startedRef = useRef(false);
+  const gatherStars = useMemo(makeGatherStars, []);
 
   useEffect(() => () => cancelAnimationFrame(rafRef.current), []);
 
@@ -27,6 +55,13 @@ const EntryScreen = ({ content, name, onStart }) => {
       return;
     }
     rafRef.current = requestAnimationFrame(tick);
+  };
+
+  const begin = () => {
+    startedRef.current = true;
+    setIsBlooming(true);
+    vibrate([30, 40, 90]);
+    onStart();
   };
 
   const handlePointerDown = (e) => {
@@ -45,8 +80,7 @@ const EntryScreen = ({ content, name, onStart }) => {
     cancelAnimationFrame(rafRef.current);
     setIsHolding(false);
     if (chargedRef.current && !startedRef.current) {
-      startedRef.current = true;
-      onStart();
+      begin();
       return;
     }
     if (!startedRef.current) setProgress(0);
@@ -55,15 +89,21 @@ const EntryScreen = ({ content, name, onStart }) => {
   const handleKeyDown = (e) => {
     if ((e.key === 'Enter' || e.key === ' ') && !startedRef.current) {
       e.preventDefault();
-      startedRef.current = true;
-      onStart();
+      setProgress(1);
+      begin();
     }
   };
 
   return (
-    <div className="entry-screen">
+    <div
+      className={`entry-screen ${isHolding ? 'holding' : ''} ${isBlooming ? 'blooming' : ''}`}
+      style={{ '--p': progress.toFixed(3) }}
+    >
       <div className="entry-text">
-        <h1 className="entry-title text-gradient">Hi {name}.</h1>
+        <h1 className="entry-greeting" aria-label={content.greeting}>
+          <span className="entry-greeting-ink" aria-hidden="true">{content.greeting}</span>
+          <span className="entry-pen" aria-hidden="true" />
+        </h1>
         <p className="entry-subtitle">{content.subtitle}</p>
       </div>
 
@@ -76,6 +116,12 @@ const EntryScreen = ({ content, name, onStart }) => {
         onContextMenu={(e) => e.preventDefault()}
         aria-label="Press and hold to begin"
       >
+        <span className="gather" aria-hidden="true">
+          {gatherStars.map((star) => (
+            <span key={star.id} className="gather-star" style={star.style} />
+          ))}
+        </span>
+
         <svg className="hold-ring" viewBox="0 0 120 120" aria-hidden="true">
           <circle className="hold-ring-track" cx="60" cy="60" r={RING_RADIUS} />
           <circle
@@ -88,9 +134,11 @@ const EntryScreen = ({ content, name, onStart }) => {
           />
         </svg>
         <svg className="hold-star-shape" viewBox="0 0 100 100" aria-hidden="true">
-          <path d="M50 0 Q50 50 100 50 Q50 50 50 100 Q50 50 0 50 Q50 50 50 0 Z" />
+          <path d={STAR_PATH} />
         </svg>
         <span className="hold-star-glow" aria-hidden="true"></span>
+
+        {isBlooming && <span className="entry-bloom" aria-hidden="true" />}
       </button>
 
       <p className="scene-hint entry-hint">

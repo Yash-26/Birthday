@@ -16,6 +16,7 @@ import './App.css';
 
 const SCENE_COUNT = 8;
 const SCENE_EXIT_MS = 700;
+const ENTRY_BLOOM_MS = 700;
 
 // While developing, jump straight to a scene with ?scene=4 (ignored in the real build)
 function getInitialScene() {
@@ -24,18 +25,11 @@ function getInitialScene() {
   return Number.isInteger(scene) && scene > 0 && scene < SCENE_COUNT ? scene : 0;
 }
 
-// Temporary while choosing the song: ?song=2 plays the alternative (works on the live site too)
-function getMusicSrc() {
-  const { src, alternative } = birthdayContent.music;
-  const wantsAlternative = new URLSearchParams(window.location.search).get('song') === '2';
-  return wantsAlternative && alternative ? alternative : src;
-}
-
 function App() {
   const [sceneIndex, setSceneIndex] = useState(getInitialScene);
   const [isLeaving, setIsLeaving] = useState(false);
   const leavingRef = useRef(false);
-  const music = useBackgroundMusic(getMusicSrc());
+  const music = useBackgroundMusic(birthdayContent.music.src);
   const name = birthdayContent.recipientName;
 
   const goNext = useCallback(() => {
@@ -49,13 +43,14 @@ function App() {
     }, SCENE_EXIT_MS);
   }, []);
 
+  // Music starts on her release; the scene changes once the light has filled the screen
   const handleStart = () => {
     music.start();
-    goNext();
+    setTimeout(goNext, ENTRY_BLOOM_MS);
   };
 
   const scenes = [
-    <EntryScreen key="entry" content={birthdayContent.opening} name={name} onStart={handleStart} />,
+    <EntryScreen key="entry" content={birthdayContent.opening} onStart={handleStart} />,
     <Introduction key="intro" lines={birthdayContent.introduction} onNext={goNext} />,
     <StoryConstellation key="story" ourStory={birthdayContent.ourStory} onNext={goNext} />,
     <MemoryGallery key="moments" moments={birthdayContent.moments} onNext={goNext} />,

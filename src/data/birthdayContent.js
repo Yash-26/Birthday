@@ -2,7 +2,8 @@ export const birthdayContent = {
   recipientName: "Suvi",
 
   opening: {
-    subtitle: "I made you a little universe.",
+    greeting: "Suvi,",
+    subtitle: "Every star here was placed for you.",
     hint: "Press & hold the star to step in"
   },
 
@@ -110,8 +111,6 @@ export const birthdayContent = {
   },
 
   music: {
-    src: "/assets/audio/Theme%20of%20Mitsuha.mp3",
-    // Temporary while choosing: open the site with ?song=2 to hear this one instead
-    alternative: "/assets/audio/Nandemonaiya.mp3"
+    src: "/assets/audio/Theme%20of%20Mitsuha.mp3"
   }
 };

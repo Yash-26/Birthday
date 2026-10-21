@@ -1,4 +1,5 @@
 .entry-screen {
+  --p: 0;
   width: 100%;
   min-height: 100%;
   display: flex;
@@ -12,25 +13,75 @@
 .entry-text {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  animation: fadeIn 2s ease-out both;
+  align-items: center;
+  gap: 1rem;
 }
 
-.entry-title {
-  font-size: clamp(3rem, 14vw, 5.5rem);
-  letter-spacing: -0.02em;
+/* Her name, written in like the first line of a letter */
+.entry-greeting {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-hand);
+  font-weight: 600;
+  font-size: clamp(4.2rem, 21vw, 6.5rem);
+  line-height: 1;
+  padding: 0 0.15em;
+  color: var(--color-accent-sakura);
+  filter: drop-shadow(0 0 14px rgba(251, 207, 232, 0.45));
+}
+
+.entry-greeting-ink {
+  display: inline-block;
+  -webkit-mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
+  mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
+  -webkit-mask-size: 250% 100%;
+  mask-size: 250% 100%;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+  animation: ink-write 1.9s cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.4s forwards;
+}
+
+@keyframes ink-write {
+  to {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+}
+
+/* A glowing pen tip that travels with the writing */
+.entry-pen {
+  position: absolute;
+  left: 0;
+  top: 62%;
+  width: 6px;
+  height: 6px;
+  margin: -3px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px 2px #fff, 0 0 18px 6px rgba(251, 207, 232, 0.8);
+  opacity: 0;
+  animation: pen-travel 1.9s cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.4s forwards;
+}
+
+@keyframes pen-travel {
+  0% { left: 4%; opacity: 0; }
+  8% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { left: 96%; opacity: 0; }
 }
 
 .entry-subtitle {
   font-family: var(--font-display);
   font-style: italic;
-  font-size: clamp(1.15rem, 5vw, 1.5rem);
+  font-size: clamp(1.15rem, 5vw, 1.45rem);
   color: var(--color-text-main);
-  opacity: 0.85;
+  opacity: 0;
+  animation: fadeIn 1.6s ease 2.4s forwards;
 }
 
 .hold-star {
   position: relative;
+  z-index: 3; /* so the bloom covers the text */
   width: 150px;
   height: 150px;
   border: none;
@@ -39,7 +90,37 @@
   cursor: pointer;
   touch-action: none;
   -webkit-touch-callout: none;
-  animation: fadeIn 2s ease-out 0.8s both;
+  animation: fadeIn 1.6s ease-out 3.1s both;
+}
+
+/* The sky gathering toward the star while she holds */
+.gather {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.gather-star {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  margin: calc(var(--size) / -2);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 calc(4px + var(--p) * 6px) rgba(251, 207, 232, calc(0.4 + var(--p) * 0.6));
+  opacity: calc(var(--o) + var(--p) * (1 - var(--o)));
+  transform:
+    translate(calc(var(--x) * (1 - var(--p) * 0.78)), calc(var(--y) * (1 - var(--p) * 0.78)))
+    scale(calc(1 + var(--p) * 0.8));
+  transition: transform 0.9s ease, opacity 0.9s ease;
+}
+
+/* Follow her finger exactly while holding; ease back if she lets go too early */
+.entry-screen.holding .gather-star {
+  transition: none;
 }
 
 .hold-ring {
@@ -105,8 +186,34 @@
   background: radial-gradient(circle, rgba(251, 207, 232, 0.5), transparent 70%);
 }
 
+/* Letting go: the star blooms into light that fills the screen */
+.entry-bloom {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 80px;
+  height: 80px;
+  margin: -40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0%, rgba(251, 207, 232, 0.95) 25%, rgba(167, 139, 250, 0.7) 50%, rgba(167, 139, 250, 0) 70%);
+  pointer-events: none;
+  animation: entry-bloom 1.1s cubic-bezier(0.55, 0, 0.35, 1) forwards;
+}
+
+@keyframes entry-bloom {
+  0% { transform: scale(0.3); opacity: 1; }
+  100% { transform: scale(32); opacity: 1; }
+}
+
+.entry-screen.blooming .entry-text,
+.entry-screen.blooming .entry-hint {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
 .entry-hint {
-  animation-delay: 1.6s;
+  opacity: 0;
+  animation: fadeIn 1.2s ease 3.8s forwards, hint-breathe 2.4s ease-in-out 5s infinite;
 }
 
 @keyframes star-idle {
