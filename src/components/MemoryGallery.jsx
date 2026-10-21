@@ -67,10 +67,19 @@ const MemoryGallery = ({ moments, onNext }) => {
         transition: drag.active ? 'none' : 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
       };
     }
+    // While the top card flies away, the rest already move up one place, so the
+    // next photo is fully in front by the time the swap completes (no jump)
+    const place = flyDirection ? depth - 1 : depth;
+    if (place === 0) {
+      return {
+        transform: `translate(0px, 0px) rotate(${tilt}deg)`,
+        transition: `transform ${FLY_OUT_MS}ms ease-out`,
+      };
+    }
     return {
-      transform: `translateY(${depth * 12}px) scale(${1 - depth * 0.05}) rotate(${tilt}deg)`,
-      opacity: depth > 2 ? 0 : 1,
-      transition: depth > 2 ? 'none' : 'transform 0.4s ease, opacity 0.4s ease',
+      transform: `translateY(${place * 12}px) scale(${1 - place * 0.05}) rotate(${tilt}deg)`,
+      opacity: place > 2 ? 0 : 1,
+      transition: depth > 2 && !flyDirection ? 'none' : `transform ${FLY_OUT_MS}ms ease-out, opacity ${FLY_OUT_MS}ms ease-out`,
     };
   };
 

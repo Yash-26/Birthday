@@ -103,32 +103,58 @@
   pointer-events: none;
 }
 
+/* Each star travels from its place in the sky to its spot on the halo (--g: 0 → 1).
+   All the same size, so the halo reads as one even circle. */
 .gather-star {
   position: absolute;
-  width: var(--size);
-  height: var(--size);
-  margin: calc(var(--size) / -2);
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 calc(4px + var(--p) * 6px) rgba(251, 207, 232, calc(0.4 + var(--p) * 0.6));
-  opacity: calc(var(--o) + var(--p) * (1 - var(--o)));
-  transform:
-    translate(calc(var(--x) * (1 - var(--p) * 0.78)), calc(var(--y) * (1 - var(--p) * 0.78)))
-    scale(calc(1 + var(--p) * 0.8));
+  width: 7px;
+  height: 7px;
+  margin: -3.5px;
+  opacity: calc(var(--o) + var(--g) * (1 - var(--o)));
+  transform: translate(
+    calc(var(--x) + (var(--tx) - var(--x)) * var(--g)),
+    calc(var(--y) + (var(--ty) - var(--y)) * var(--g))
+  );
   transition: transform 0.9s ease, opacity 0.9s ease;
 }
 
-/* Follow her finger exactly while holding; ease back if she lets go too early */
+.gather-star svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: #fff;
+  filter: drop-shadow(0 0 3px rgba(251, 207, 232, 0.9));
+}
+
+/* Follow her finger exactly while holding; drift back if she lets go too early */
 .entry-screen.holding .gather-star {
   transition: none;
 }
 
+.gather-halo {
+  position: absolute;
+  inset: 0;
+}
+
+/* Once the halo is whole, every star breathes together in one slow, soft glow */
+.hold-star.charged .gather-star svg {
+  fill: #fde7f3;
+  animation: halo-breathe 3.6s ease-in-out infinite;
+}
+
+@keyframes halo-breathe {
+  0%, 100% { opacity: 0.75; filter: drop-shadow(0 0 3px rgba(251, 207, 232, 0.7)); }
+  50% { opacity: 1; filter: drop-shadow(0 0 7px rgba(251, 207, 232, 1)); }
+}
+
+/* The ring shows her progress at first, then fades as the halo takes over */
 .hold-ring {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   transform: rotate(-90deg);
+  opacity: calc(1 - var(--g));
 }
 
 .hold-ring-track {

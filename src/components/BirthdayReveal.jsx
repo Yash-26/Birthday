@@ -8,6 +8,7 @@ import ShootingStars from './ShootingStars';
 import './BirthdayReveal.css';
 
 const STUBBORN_FLAME_MS = 6000;
+const MUSIC_FADE_MS = 1800;
 
 // intro -> stars -> cake -> wish -> reveal
 const BirthdayReveal = ({ content, name, music, onNext }) => {
@@ -15,6 +16,7 @@ const BirthdayReveal = ({ content, name, music, onNext }) => {
   const [introStep, setIntroStep] = useState(1);
   const [candleOut, setCandleOut] = useState(false);
   const [isStubborn, setIsStubborn] = useState(false);
+  const [isPreparing, setIsPreparing] = useState(false);
   const [imageError, setImageError] = useState(false);
   const flameRef = useRef(null);
   const timersRef = useRef([]);
@@ -44,12 +46,19 @@ const BirthdayReveal = ({ content, name, music, onNext }) => {
 
   const mic = useBlowDetector({ onBlow: blowOut, onLevel: handleLevel });
 
+  // The music fades out gently first, and only then does the mic turn on.
+  // Android switches its audio over for the mic, which would cut off music still playing.
   const startListening = () => {
-    music.duck();
-    mic.start();
+    setIsPreparing(true);
+    music.duck(MUSIC_FADE_MS);
     later(() => {
-      if (!candleOutRef.current) setIsStubborn(true);
-    }, STUBBORN_FLAME_MS);
+      setIsPreparing(false);
+      if (candleOutRef.current) return;
+      mic.start();
+      later(() => {
+        if (!candleOutRef.current) setIsStubborn(true);
+      }, STUBBORN_FLAME_MS);
+    }, MUSIC_FADE_MS + 200);
   };
 
   const handleFlameTap = () => {
@@ -86,7 +95,8 @@ const BirthdayReveal = ({ content, name, music, onNext }) => {
 
   if (phase === 'cake') {
     let micHint = null;
-    if (mic.status === 'listening' && isStubborn) micHint = 'Blow a little closer to the phone, or tap the flame 🕯️';
+    if (isPreparing) micHint = 'Take a deep breath… 🤍';
+    else if (mic.status === 'listening' && isStubborn) micHint = 'Blow a little closer to the phone, or tap the flame 🕯️';
     else if (mic.status === 'listening') micHint = 'Blow on your phone… 🌬️';
     else if (mic.status === 'asking') micHint = 'Allow the microphone to blow it out';
     else if (mic.status === 'denied' || mic.status === 'unavailable') micHint = 'Tap the flame to blow it out';
@@ -102,13 +112,13 @@ const BirthdayReveal = ({ content, name, music, onNext }) => {
 
         {!candleOut && (
           <div className="cake-actions">
-            {mic.status === 'idle' && (
+            {mic.status === 'idle' && !isPreparing && (
               <button className="btn-soft" onClick={startListening}>
                 <Mic size={18} /> Blow out the candle
               </button>
             )}
             {micHint && <p className="scene-hint cake-hint">{micHint}</p>}
-            {mic.status === 'idle' && <p className="cake-or">or tap the flame</p>}
+            {mic.status === 'idle' && !isPreparing && <p className="cake-or">or tap the flame</p>}
           </div>
         )}
         {candleOut && <p className="cake-done">Your wish is on its way ✨</p>}

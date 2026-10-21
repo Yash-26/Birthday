@@ -5,33 +5,51 @@ import './EntryScreen.css';
 const HOLD_MS = 1300;
 const RING_RADIUS = 54;
 const RING_LENGTH = 2 * Math.PI * RING_RADIUS;
-const GATHER_STAR_COUNT = 34;
+const HALO_STAR_COUNT = 16;
+const HALO_RADIUS = 92;
 
 const STAR_PATH = 'M50 0 Q50 50 100 50 Q50 50 50 100 Q50 50 0 50 Q50 50 50 0 Z';
 
-// Stars scattered around the screen (offsets from the hold star, in vw/vh)
-// that drift in and brighten while she holds
-function makeGatherStars() {
-  const stars = [];
-  while (stars.length < GATHER_STAR_COUNT) {
-    const x = Math.random() * 96 - 48;
-    const y = Math.random() * 90 - 45;
-    if (Math.abs(x) < 14 && Math.abs(y) < 9) continue; // keep clear of the star itself
-    stars.push({
-      id: stars.length,
-      style: {
-        '--x': `${x.toFixed(1)}vw`,
-        '--y': `${y.toFixed(1)}vh`,
-        '--o': (0.15 + Math.random() * 0.35).toFixed(2),
-        '--size': `${(1.5 + Math.random() * 2.5).toFixed(1)}px`,
-      },
-    });
+// Stars scattered across the sky (offsets from the hold star, in px).
+// While she holds, they drift in and settle into a small, even halo around her star.
+function makeHaloStars() {
+  const halfW = window.innerWidth / 2;
+  const halfH = window.innerHeight / 2;
+  const angleOf = (p) => Math.atan2(p.y, p.x);
+
+  const starts = [];
+  while (starts.length < HALO_STAR_COUNT) {
+    const x = (Math.random() * 2 - 1) * halfW * 0.96;
+    const y = (Math.random() * 2 - 1) * halfH * 0.9;
+    if (Math.abs(x) < 60 && Math.abs(y) < 60) continue; // keep clear of the star itself
+    starts.push({ x, y });
   }
-  return stars;
+
+  // Evenly spaced spots on a circle, matched to stars by direction so paths don't cross
+  const targets = Array.from({ length: HALO_STAR_COUNT }, (_, k) => {
+    const angle = (k / HALO_STAR_COUNT) * Math.PI * 2 - Math.PI / 2;
+    return { x: Math.cos(angle) * HALO_RADIUS, y: Math.sin(angle) * HALO_RADIUS };
+  });
+  starts.sort((a, b) => angleOf(a) - angleOf(b));
+  targets.sort((a, b) => angleOf(a) - angleOf(b));
+
+  return targets.map((target, i) => ({
+    id: i,
+    style: {
+      '--x': `${starts[i].x.toFixed(1)}px`,
+      '--y': `${starts[i].y.toFixed(1)}px`,
+      '--tx': `${target.x.toFixed(1)}px`,
+      '--ty': `${target.y.toFixed(1)}px`,
+      '--o': (0.25 + Math.random() * 0.3).toFixed(2),
+    },
+  }));
 }
 
+// Smooth start and finish, so the gathering feels gentle
+const easeInOut = (t) => t * t * (3 - 2 * t);
+
 // Her name writes itself in like the start of a letter. Holding the star
-// gathers the sky around it; letting go blooms into light and opens the site.
+// gathers the sky into a soft halo around it; letting go blooms into light.
 const EntryScreen = ({ content, onStart }) => {
   const [progress, setProgress] = useState(0);
   const [isHolding, setIsHolding] = useState(false);
@@ -41,7 +59,7 @@ const EntryScreen = ({ content, onStart }) => {
   const startTimeRef = useRef(0);
   const chargedRef = useRef(false);
   const startedRef = useRef(false);
-  const gatherStars = useMemo(makeGatherStars, []);
+  const haloStars = useMemo(makeHaloStars, []);
 
   useEffect(() => () => cancelAnimationFrame(rafRef.current), []);
 
@@ -97,7 +115,7 @@ const EntryScreen = ({ content, onStart }) => {
   return (
     <div
       className={`entry-screen ${isHolding ? 'holding' : ''} ${isBlooming ? 'blooming' : ''}`}
-      style={{ '--p': progress.toFixed(3) }}
+      style={{ '--p': progress.toFixed(3), '--g': easeInOut(progress).toFixed(3) }}
     >
       <div className="entry-text">
         <h1 className="entry-greeting" aria-label={content.greeting}>
@@ -117,9 +135,15 @@ const EntryScreen = ({ content, onStart }) => {
         aria-label="Press and hold to begin"
       >
         <span className="gather" aria-hidden="true">
-          {gatherStars.map((star) => (
-            <span key={star.id} className="gather-star" style={star.style} />
-          ))}
+          <span className="gather-halo">
+            {haloStars.map((star) => (
+              <span key={star.id} className="gather-star" style={star.style}>
+                <svg viewBox="0 0 100 100">
+                  <path d={STAR_PATH} />
+                </svg>
+              </span>
+            ))}
+          </span>
         </span>
 
         <svg className="hold-ring" viewBox="0 0 120 120" aria-hidden="true">

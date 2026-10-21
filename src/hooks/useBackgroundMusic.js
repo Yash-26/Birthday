@@ -35,7 +35,9 @@ export function useBackgroundMusic(src, targetVolume = 0.35) {
 
     const step = (now) => {
       const t = Math.min(1, (now - startTime) / duration);
-      audio.volume = Math.max(0, Math.min(1, from + (to - from) * t));
+      // Eased so the loudness changes evenly to the ear, with no sudden drop at the end
+      const eased = t * t * (3 - 2 * t);
+      audio.volume = Math.max(0, Math.min(1, from + (to - from) * eased));
       if (t < 1) {
         fadeRef.current = requestAnimationFrame(step);
       } else {
@@ -56,9 +58,9 @@ export function useBackgroundMusic(src, targetVolume = 0.35) {
       .catch(() => setIsPlaying(false));
   }, [fade, targetVolume]);
 
-  const pause = useCallback(() => {
+  const pause = useCallback((duration = 900) => {
     setIsPlaying(false);
-    fade(0, 900, () => audioRef.current?.pause());
+    fade(0, duration, () => audioRef.current?.pause());
   }, [fade]);
 
   // Must be called from inside a tap so the browser allows sound
@@ -80,12 +82,12 @@ export function useBackgroundMusic(src, targetVolume = 0.35) {
     }
   }, [isPlaying, pause, play]);
 
-  // Fade the music out for the video, and back in afterwards
+  // Fade the music out for the video or the candle, and back in afterwards
   // (unless she muted it herself)
-  const duck = useCallback(() => {
+  const duck = useCallback((duration) => {
     if (!audioRef.current || audioRef.current.paused) return;
     duckedRef.current = true;
-    pause();
+    pause(duration);
   }, [pause]);
 
   const unduck = useCallback(() => {

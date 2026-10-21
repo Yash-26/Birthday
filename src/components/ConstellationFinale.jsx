@@ -110,7 +110,7 @@ const ConstellationFinale = ({ onNext }) => {
         {phase >= 5 && (
           <>
             <h2 className="finale-heading text-accent">Your name, written in my sky</h2>
-            <p className="finale-sub">And wherever you shine, I'll be right there beside you.</p>
+            <p className="finale-sub">And wherever you are, I'll always be right beside you.</p>
           </>
         )}
         {phase >= 6 && (
