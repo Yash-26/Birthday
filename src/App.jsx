@@ -52,7 +52,7 @@ function App() {
     <Introduction key="intro" lines={birthdayContent.introduction} onNext={goNext} />,
     <StoryConstellation key="story" ourStory={birthdayContent.ourStory} onNext={goNext} />,
     <MemoryGallery key="moments" moments={birthdayContent.moments} onNext={goNext} />,
-    <BirthdayReveal key="birthday" content={birthdayContent.birthday} name={name} onNext={goNext} />,
+    <BirthdayReveal key="birthday" content={birthdayContent.birthday} name={name} music={music} onNext={goNext} />,
     <FuturePlans key="future" plans={birthdayContent.future} onNext={goNext} />,
     <ConstellationFinale key="finale" onNext={goNext} />,
     <GiftScene key="gift" video={birthdayContent.video} music={music} />,

@@ -26,21 +26,21 @@ export const birthdayContent = {
     },
     {
       id: "memory-2",
-      title: "A Little Gift from the Sea",
-      description: "Your favourite kind of place, your hand in mine, and little green treasures the sea seemed to leave just for us.",
-      image: "/assets/images/memory-02.jpg"
-    },
-    {
-      id: "memory-3",
       title: "Somewhere Along the Way",
       description: "No matter how ordinary the moment might have seemed, it gave me another little piece of time with you to keep.",
       image: "/assets/images/memory-03.jpg"
     },
     {
-      id: "memory-4",
+      id: "memory-3",
       title: "Our First New Beginning",
       description: "A new year, a temple visit, and you beside me. I couldn't have asked for a more meaningful way to begin a year with you.",
       image: "/assets/images/memory-04.jpg"
+    },
+    {
+      id: "memory-4",
+      title: "A Little Gift from the Sea",
+      description: "Your favourite kind of place, your hand in mine, and little green treasures the sea seemed to leave just for us.",
+      image: "/assets/images/memory-02.jpg"
     },
     {
       id: "memory-5",
@@ -83,7 +83,7 @@ export const birthdayContent = {
       "Somehow, in this vast universe, life brought me to you.",
       "And today, I get to celebrate you."
     ],
-    popWords: ["You", "are", "my", "favourite", "person"],
+    starWords: ["Of", "all", "the", "stars,", "I’d", "choose", "you"],
     message: "I hope this little universe reminds you how deeply loved you are.",
     image: "/assets/images/miha3.jpg"
   },

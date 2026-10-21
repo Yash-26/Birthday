@@ -4,26 +4,20 @@ import { vibrate } from '../utils/haptics';
 import { useBlowDetector } from '../hooks/useBlowDetector';
 import BirthdayCake from './BirthdayCake';
 import Confetti from './Confetti';
+import ShootingStars from './ShootingStars';
 import './BirthdayReveal.css';
 
-const ORB_POSITIONS = [
-  { x: 22, y: 26 },
-  { x: 74, y: 18 },
-  { x: 48, y: 50 },
-  { x: 20, y: 76 },
-  { x: 78, y: 70 },
-];
+const STUBBORN_FLAME_MS = 6000;
 
-// intro -> pop -> cake -> wish -> reveal
-const BirthdayReveal = ({ content, name, onNext }) => {
+// intro -> stars -> cake -> wish -> reveal
+const BirthdayReveal = ({ content, name, music, onNext }) => {
   const [phase, setPhase] = useState('intro');
   const [introStep, setIntroStep] = useState(1);
-  const [popped, setPopped] = useState([]);
   const [candleOut, setCandleOut] = useState(false);
+  const [isStubborn, setIsStubborn] = useState(false);
   const [imageError, setImageError] = useState(false);
   const flameRef = useRef(null);
   const timersRef = useRef([]);
-  const words = content.popWords;
 
   const later = (fn, ms) => {
     timersRef.current.push(setTimeout(fn, ms));
@@ -39,13 +33,24 @@ const BirthdayReveal = ({ content, name, onNext }) => {
     vibrate([40, 30, 80]);
     timersRef.current.push(setTimeout(() => setPhase('wish'), 1800));
     timersRef.current.push(setTimeout(() => setPhase('reveal'), 6200));
-  }, []);
+    // The music stepped aside while the mic listened; bring it back for the reveal
+    timersRef.current.push(setTimeout(() => music.unduck(), 6200));
+  }, [music]);
 
-  const handleLevel = useCallback((level) => {
-    flameRef.current?.style.setProperty('--wind', level.toFixed(2));
+  const handleLevel = useCallback((wind, progress) => {
+    flameRef.current?.style.setProperty('--wind', wind.toFixed(2));
+    flameRef.current?.style.setProperty('--blown', progress.toFixed(2));
   }, []);
 
   const mic = useBlowDetector({ onBlow: blowOut, onLevel: handleLevel });
+
+  const startListening = () => {
+    music.duck();
+    mic.start();
+    later(() => {
+      if (!candleOutRef.current) setIsStubborn(true);
+    }, STUBBORN_FLAME_MS);
+  };
 
   const handleFlameTap = () => {
     mic.stop();
@@ -56,18 +61,7 @@ const BirthdayReveal = ({ content, name, onNext }) => {
     if (introStep < content.preReveal.length) {
       setIntroStep((step) => step + 1);
     } else {
-      setPhase('pop');
-    }
-  };
-
-  const popOrb = (index) => {
-    if (popped.includes(index)) return;
-    vibrate(18);
-    const next = [...popped, index];
-    setPopped(next);
-    if (next.length === words.length) {
-      vibrate([30, 50, 30, 50, 60]);
-      later(() => setPhase('cake'), 2600);
+      setPhase('stars');
     }
   };
 
@@ -86,50 +80,14 @@ const BirthdayReveal = ({ content, name, onNext }) => {
     );
   }
 
-  if (phase === 'pop') {
-    const allPopped = popped.length === words.length;
-    return (
-      <div className="bday bday-pop">
-        <h2 className="scene-heading text-gradient">Pop all {words.length} stars</h2>
-
-        <p className={`pop-sentence ${allPopped ? 'complete' : ''}`}>
-          {words.map((word, i) => (
-            <span key={word + i} className={`pop-word ${i < popped.length ? 'shown' : ''}`}>{word}</span>
-          ))}
-          {allPopped && <span className="pop-heart">❤️</span>}
-        </p>
-
-        <div className="pop-field">
-          {ORB_POSITIONS.slice(0, words.length).map((pos, i) => {
-            const isPopped = popped.includes(i);
-            return (
-              <button
-                key={i}
-                className={`pop-orb ${isPopped ? 'popped' : ''}`}
-                style={{ left: `${pos.x}%`, top: `${pos.y}%`, animationDelay: `${i * -0.7}s` }}
-                onPointerDown={() => popOrb(i)}
-                disabled={isPopped}
-                aria-label="Pop this star"
-              >
-                <span className="pop-orb-core">
-                  <svg viewBox="0 0 100 100" aria-hidden="true">
-                    <path d="M50 0 Q50 50 100 50 Q50 50 50 100 Q50 50 0 50 Q50 50 50 0 Z" />
-                  </svg>
-                </span>
-                <span className="pop-burst" aria-hidden="true">
-                  {Array.from({ length: 8 }, (_, k) => <i key={k} style={{ '--angle': `${k * 45}deg` }} />)}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    );
+  if (phase === 'stars') {
+    return <ShootingStars words={content.starWords} onComplete={() => setPhase('cake')} />;
   }
 
   if (phase === 'cake') {
     let micHint = null;
-    if (mic.status === 'listening') micHint = 'Blow gently on your phone… 🌬️';
+    if (mic.status === 'listening' && isStubborn) micHint = 'Blow a little closer to the phone, or tap the flame 🕯️';
+    else if (mic.status === 'listening') micHint = 'Blow on your phone… 🌬️';
     else if (mic.status === 'asking') micHint = 'Allow the microphone to blow it out';
     else if (mic.status === 'denied' || mic.status === 'unavailable') micHint = 'Tap the flame to blow it out';
 
@@ -145,7 +103,7 @@ const BirthdayReveal = ({ content, name, onNext }) => {
         {!candleOut && (
           <div className="cake-actions">
             {mic.status === 'idle' && (
-              <button className="btn-soft" onClick={mic.start}>
+              <button className="btn-soft" onClick={startListening}>
                 <Mic size={18} /> Blow out the candle
               </button>
             )}
