@@ -161,10 +161,34 @@
   padding: 0 0.5rem;
 }
 
+/* Handwritten, like her name on the first screen: each line writes itself in */
 .finale-heading {
-  font-size: clamp(1.6rem, 7vw, 2.3rem);
-  text-wrap: balance;
-  animation: fadeIn 1.8s ease both;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--font-hand);
+  font-weight: 600;
+  font-size: clamp(2.3rem, 11vw, 3.1rem);
+  line-height: 1.05;
+  color: var(--color-accent-sakura);
+  filter: drop-shadow(0 0 12px rgba(251, 207, 232, 0.45));
+}
+
+.finale-ink {
+  display: inline-block;
+  padding: 0 0.1em;
+  -webkit-mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
+  mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
+  -webkit-mask-size: 250% 100%;
+  mask-size: 250% 100%;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+  animation: ink-write 1.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+}
+
+.finale-ink.second {
+  animation-delay: 1.5s;
+  animation-duration: 2s;
 }
 
 .finale-sub {
@@ -172,7 +196,9 @@
   font-style: italic;
   font-size: 1.1rem;
   color: var(--color-text-main);
-  animation: fadeIn 1.8s ease 1.6s both;
+  margin-top: 0.4rem;
+  text-wrap: balance;
+  animation: fadeIn 1.8s ease 3.6s both;
 }
 
 .finale-next {

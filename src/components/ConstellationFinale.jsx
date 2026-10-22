@@ -37,7 +37,7 @@ const ConstellationFinale = ({ onNext }) => {
 
   useEffect(() => {
     if (phase !== 5) return;
-    const timer = setTimeout(() => setPhase(6), 5000);
+    const timer = setTimeout(() => setPhase(6), 6800);
     return () => clearTimeout(timer);
   }, [phase]);
 
@@ -109,7 +109,11 @@ const ConstellationFinale = ({ onNext }) => {
       <div className="finale-bottom-text">
         {phase >= 5 && (
           <>
-            <h2 className="finale-heading text-accent">Your name, written in my sky</h2>
+            {/* Written in the same hand as her name on the first screen, line by line */}
+            <h2 className="finale-heading" aria-label="Your name, written in my sky">
+              <span className="finale-ink" aria-hidden="true">Your name,</span>
+              <span className="finale-ink second" aria-hidden="true">written in my sky</span>
+            </h2>
             <p className="finale-sub">And wherever you are, I'll always be right beside you.</p>
           </>
         )}
