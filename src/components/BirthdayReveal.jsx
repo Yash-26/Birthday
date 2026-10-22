@@ -141,7 +141,7 @@ const BirthdayReveal = ({ content, name, music, onNext }) => {
       <h1 className="birthday-greeting">
         <span className="greeting-line text-accent">Happy Birthday,</span>
         <span className="greeting-name">
-          <span className="text-accent">My dear {name}</span>{' '}
+          <span className="text-accent">{content.greetingName}</span>
           <span className="greeting-heart" role="img" aria-label="heart">❤️</span>
         </span>
       </h1>

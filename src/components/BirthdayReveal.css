@@ -184,13 +184,19 @@
   font-size: clamp(1.8rem, 8vw, 2.6rem);
 }
 
+/* The name is centred on its own; the heart floats beside it
+   so it doesn't pull the name off-centre */
 .greeting-name {
+  position: relative;
   font-size: clamp(2.4rem, 11vw, 3.6rem);
 }
 
 .greeting-heart {
-  display: inline-block;
-  font-size: 0.7em;
+  position: absolute;
+  left: calc(100% + 0.2em);
+  bottom: 0.18em;
+  font-size: 0.6em;
+  line-height: 1;
   animation: pulse-glow 2s infinite;
 }
 

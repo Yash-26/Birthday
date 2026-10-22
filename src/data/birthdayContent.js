@@ -2,7 +2,7 @@ export const birthdayContent = {
   recipientName: "Suvi",
 
   opening: {
-    greeting: "Suvi,",
+    greeting: "Chellakutty,",
     subtitle: "Every star here was placed for you.",
     hint: "Press & hold the star to step in"
   },
@@ -85,6 +85,7 @@ export const birthdayContent = {
       "And today, I get to celebrate you."
     ],
     starWords: ["Of", "all", "the", "stars,", "I’d", "choose", "you"],
+    greetingName: "Suvi Kutty",
     message: "I hope this little universe reminds you how deeply loved you are.",
     image: "/assets/images/miha3.jpg"
   },
