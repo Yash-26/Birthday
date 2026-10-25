@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Original full-size media (too large for GitHub); the site uses compressed copies in public/
+source-media
